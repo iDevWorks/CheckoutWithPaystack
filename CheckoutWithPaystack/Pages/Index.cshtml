@@ -1,0 +1,28 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<section class="d-flex justify-content-center">
+    <div class="collection-wrapper pt-5">
+        @if (Model.Products.Any())
+        {
+            foreach (var product in Model.Products)
+            {
+                <div class="d-flex flex-column align-items-center gap-3 border cart-item py-4">
+                    <div class="item-img border-bottom">
+                        <img class="img-fluid" src="@product.ImageUrl" alt="">
+                    </div>
+                    <div class="item-description d-flex flex-column gap-2 text-center px-2">
+                        <h6 class="mb-0 fw-bold">@product.Title</h6>
+                        <p class="mb-0 fw-bold price">@product.Amount.ToString("C")</p>
+                    </div>
+                    <button class="btn cta-btn">Add To Cart</button>
+                </div>
+            }
+        
+        } 
+    </div>
+</section>
+

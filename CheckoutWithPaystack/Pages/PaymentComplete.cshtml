@@ -1,0 +1,72 @@
+﻿@page
+@model CheckoutWithPaystack.Pages.PaymentCompleteModel
+@{
+    ViewData["Title"] = "Payment Summary";
+}
+
+<div class="container">
+    <h3>Transaction Summary</h3>
+    <h5 class="text-danger mt-2 @(string.IsNullOrWhiteSpace(Model.ErrorMessage) ? "d-none":"")">@Model.ErrorMessage</h5>
+
+    <section class="row justify-content-center my-4">
+        <div class="col-sm-6 col-md-5 mb-2 mb-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Transaction Status</h5>
+                    <p class="card-text font-weight-bold @(string.IsNullOrWhiteSpace(Model.ResponseData?.Status) ? "text-danger":"text-success")">
+                        @Model.ResponseData?.Status
+                        <span class="d-block text-danger">@Model.ResponseData?.GatewayResponse</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-5 mt-2 mt-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order Number</h5>
+                    <p class="card-text text-black-50">@Model.ResponseData?.Reference</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-5 my-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Amount</h5>
+                    @{
+                        var nAmount = (Model.ResponseData?.AmountInKobo / 100);
+                    }
+                    <p class="card-text text-black-50">@nAmount?.ToString("C2")</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-5 my-0 my-sm-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Payment To</h5>
+                    <p class="card-text text-black-50">iDevWorks Technologies</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-5 my-2 my-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Payment For</h5>
+                    <p class="card-text text-black-50">SMS</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Buyer Information</h5>
+                    <p class="card-text text-black-50">@Model.ResponseData?.Customer.Email</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

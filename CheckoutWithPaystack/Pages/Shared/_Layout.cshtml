@@ -1,0 +1,93 @@
+﻿@using CheckoutWithPaystack.Services;
+@inject CartService _cartService;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CheckoutWithPaystack</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CheckoutWithPaystack.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg pb-0">
+            <div class="container justify-content-start justify-content-lg-between border-bottom py-3">
+
+                <button type="button" title="btn" class="btn btn-bg-light d-block d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#navmenu" 
+                    aria-controls="offcanvasExample"><span class="navbar-toggler-icon"></span>
+                </button>
+
+                <img class="navbar-brand py-0" src="images/logo.svg" alt="logo-img">
+
+                <ul class="navbar-nav d-none d-lg-flex">
+                    <li class="nav-item ms-3 "><a asp-page="./Index" class="nav-link navigation">Collections</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link navigation">Men</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link navigation">Women</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link navigation">About</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link navigation">Contact</a></li>
+                </ul>
+
+                <div class=" offcanvas offcanvas-start order-3 order-lg-2 d-block d-lg-none px-3" id="navmenu">
+                    <div class="offcanvas-header mt-3">
+                        <button type="button" class="btn-close text-reset fw-bold fs-2" data-bs-dismiss="offcanvas"></button>
+                    </div>
+
+                    <div class="offcanvas-body mt-4">
+                        <ul class="navbar-nav fs-3 fw-bold">
+                            <li class="nav-item"><a asp-page="./Index" class="nav-link navigation text-dark">Collections</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link navigation text-dark">Men</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link navigation text-dark">Women</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link navigation text-dark">About</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link navigation text-dark">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <ul class="navbar-nav flex-row order-2 flex-grow-1 justify-content-end">
+                    <li class="nav-item dropdown align-self-center cart-icon-wrapper me-sm-3">
+                        @* <i class="bi bi-cart3 text-secondary dropdown-toggle d-none d-lg-block position-relative" role="menu" 
+                            data-bs-toggle="dropdown" style="font-size: 1rem;">
+                            <span class="position-absolute top-25 start-50 translate-middle badge rounded-4" 
+                                style="background-color: #fd7e14;">1
+                            </span>
+                        </i> *@
+                        <a asp-page="./Cart" class="nav-link navigation px-0">
+                            <i class="bi bi-cart3 text-secondary d-block" style="font-size: 1rem;">
+                                <span class="position-absolute top-25 start-100 translate-middle badge rounded-4" 
+                                    style="background-color: #fd7e14;">
+                                    @_cartService.GetCartItems().Count()
+                                </span>
+                            </i>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-3 ms-lg-2">
+                        <img src="images/image-avatar.png" class="img-fluid avatar-image" style="width: 2.5rem;" alt="avatar-img">
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    @* <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - CheckoutWithPaystack - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer> *@
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous">
+    </script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
