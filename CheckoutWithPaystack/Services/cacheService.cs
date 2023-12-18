@@ -7,6 +7,8 @@ namespace CheckoutWithPaystack.Services
         public IEnumerable<Cart> Carts { get; }
         public IEnumerable<Product> Products { get; }
 
+        public Cart DemoCart => Carts.ToArray()[0];
+
         public CacheService()
         {
             Products = new List<Product> {

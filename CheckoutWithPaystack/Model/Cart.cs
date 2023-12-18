@@ -1,5 +1,4 @@
-﻿
-namespace CheckoutWithPaystack.Model
+﻿namespace CheckoutWithPaystack.Model
 {
     public class Cart 
     {
@@ -7,7 +6,6 @@ namespace CheckoutWithPaystack.Model
 
         public Cart()
         {
-            
         }
 
         public IEnumerable<CartItem> Items => _cartItems.Values;

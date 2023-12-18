@@ -14,7 +14,7 @@ namespace CheckoutWithPaystack.Pages
         public CartModel(PaystackService paystackService, CacheService cacheService)
         {
             _paystackService = paystackService;
-            Cart = cacheService.Carts.ToList().First();
+            Cart = cacheService.DemoCart;
         }
 
         public async Task<ActionResult> OnPostInitializePaymentAsync()

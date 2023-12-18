@@ -13,12 +13,5 @@ namespace CheckoutWithPaystack.Pages
         {
             _cacheService = cacheService;
         }
-
-        public PageResult OnGet()
-        {
-            //to be saved in browser storeage for easy access
-            //CartItems = _cartService.GetCartItems();
-            return Page();
-        }
     }
 }
