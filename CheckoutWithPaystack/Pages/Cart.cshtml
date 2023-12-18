@@ -1,17 +1,6 @@
 ﻿@page
 @model CheckoutWithPaystack.Pages.CartModel
 @{
-    ViewData["Title"] = "Cart Page";
-
-    decimal cartTotal = 0;
-    @if(Model.CartItems.Any())
-    {
-        cartTotal = Model.CartItems.Sum(c => c.Quantity * c.Amount);
-    }
-
-    decimal deliveryFee = ((cartTotal * Model.DeliveryPercent) > 3000) ? 3000 : cartTotal * Model.DeliveryPercent;
-
-
 }
 
 <section class="container d-flex flex-column flex-lg-row justify-content-center pt-4 pt-lg-5 gap-4">
@@ -25,61 +14,55 @@
     </div>
 
     <div class="d-none d-md-flex flex-column gap-3 col-lg-8 col-xl-7">
-        @if (Model.CartItems.Any())
+        @foreach (var item in Model.Cart.Items)
         {
-            foreach (var cartItem in Model.CartItems)
-            {
-                <div class="d-flex justify-content-between align-items-center border p-3 checkout-item">
-                    <div class="d-flex align-items-center gap-4">
-                        <div class="image-background d-flex justify-content-center align-items-center">
-                            <img class="img-fluid checkout-img" src="@cartItem.ImageUrl" alt="">
-                        </div>
-                        <div class="d-flex flex-column gap-1 description-wrapper">
-                            <h5 class="mb-0 fw-semibold text-secondary">@cartItem.Title</h5>
-                            <p class="mb-0 text-secondary fw-light">Product code</p>
-                        </div>
+            <div class="d-flex justify-content-between align-items-center border p-3 checkout-item">
+                <div class="d-flex align-items-center gap-4">
+                    <div class="image-background d-flex justify-content-center align-items-center">
+                        <img class="img-fluid checkout-img" src="@item.Product.ImageUrl" alt="">
                     </div>
-                    <div class="d-flex align-items-center gap-1">
-                        <button class="btn"><i class="bi bi-dash fs-4 fw-bolder d-flex align-items-center"></i></button>
-                        <input title="input" class="form-control quantity" type="text" value="@cartItem.Quantity" />
-                        <button class="btn"><i class="bi bi-plus fs-4 fw-bolder d-flex align-items-center"></i></button>
+                    <div class="d-flex flex-column gap-1 description-wrapper">
+                        <h5 class="mb-0 fw-semibold text-secondary">@item.Product.Name</h5>
+                        <p class="mb-0 text-secondary fw-light">Product code</p>
                     </div>
-
-                    <p class="fw-bold text-secondary mb-0">@cartItem.Amount.ToString("C")</p>
-                    <p class="h6 mb-0">@((cartItem.Amount * cartItem.Quantity).ToString("C"))</p>
-
-                    <i class="bi bi-trash fs-3 text-secondary"></i>
                 </div>
-            }
+                <div class="d-flex align-items-center gap-1">
+                    <button class="btn"><i class="bi bi-dash fs-4 fw-bolder d-flex align-items-center"></i></button>
+                    <input title="input" class="form-control quantity" type="text" value="@item.Quantity" />
+                    <button class="btn"><i class="bi bi-plus fs-4 fw-bolder d-flex align-items-center"></i></button>
+                </div>
+
+                <p class="fw-bold text-secondary mb-0">@item.Product.Price.ToString("C")</p>
+                <p class="h6 mb-0">@item.Amount.ToString("C")</p>
+
+                <i class="bi bi-trash fs-3 text-secondary"></i>
+            </div>
         }
     </div>
-    
+
     <div class="d-flex flex-column gap-3 d-md-none">
-        @if (Model.CartItems.Any())
+        @foreach (var item in Model.Cart.Items)
         {
-            foreach (var cartItem in Model.CartItems)
-            {
-                <div class="d-flex flex-column gap-1 border p-3 checkout-item">
-                    <div class="d-flex align-items-center gap-4">
-                        <div class="image-background d-flex justify-content-center align-items-center">
-                            <img class="img-fluid checkout-img" src="@cartItem.ImageUrl" alt="">
-                        </div>
-                        <div class="d-flex flex-column gap-1 description-wrapper">
-                            <h5 class="mb-0 fw-semibold text-secondary">@cartItem.Title</h5>
-                            <p class="mb-0 text-secondary fw-light">Product code</p>
-                            <p class="fw-bold mb-0">@cartItem.Amount.ToString("C")</p>
-                        </div>
+            <div class="d-flex flex-column gap-1 border p-3 checkout-item">
+                <div class="d-flex align-items-center gap-4">
+                    <div class="image-background d-flex justify-content-center align-items-center">
+                        <img class="img-fluid checkout-img" src="@item.Product.ImageUrl" alt="">
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0 remove-btn">remove</p>
-                        <div class="d-flex align-items-center gap-1">
-                            <button class="btn"><i class="bi bi-dash fs-4 fw-bolder d-flex align-items-center"></i></button>
-                            <input title="input" class="form-control quantity" type="text" value="@cartItem.Quantity" />
-                            <button class="btn"><i class="bi bi-plus fs-4 fw-bolder d-flex align-items-center"></i></button>
-                        </div>
+                    <div class="d-flex flex-column gap-1 description-wrapper">
+                        <h5 class="mb-0 fw-semibold text-secondary">@item.Product.Name</h5>
+                        <p class="mb-0 text-secondary fw-light">Product code</p>
+                        <p class="fw-bold mb-0">@item.Product.Price.ToString("C")</p>
                     </div>
                 </div>
-            }
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="mb-0 remove-btn">remove</p>
+                    <div class="d-flex align-items-center gap-1">
+                        <button class="btn"><i class="bi bi-dash fs-4 fw-bolder d-flex align-items-center"></i></button>
+                        <input title="input" class="form-control quantity" type="text" value="@item.Quantity" />
+                        <button class="btn"><i class="bi bi-plus fs-4 fw-bolder d-flex align-items-center"></i></button>
+                    </div>
+                </div>
+            </div>
         }
     </div>
 
@@ -89,16 +72,16 @@
             <div class="d-flex justify-content-between">
                 <h6 class="mb-0">Sub-Total</h6>
                 <p class="fw-bold mb-0 text-secondary">
-                    @cartTotal.ToString("C")
+                    @Model.Cart.TotalAmount.ToString("C")
                 </p>
             </div>
             <div class="d-flex justify-content-between">
                 <h6 class="h6 mb-0">Delivery</h6>
-                <p class="fw-bold mb-0 text-secondary">@(deliveryFee.ToString("C")) </p>
+                <p class="fw-bold mb-0 text-secondary">0.00</p>
             </div>
             <div class="d-flex justify-content-between">
                 <h3 class="h4 mb-0">Total</h3>
-                <p class="fw-bold mb-0 text-secondary h5">@((cartTotal + deliveryFee).ToString("C"))</p>
+                <p class="fw-bold mb-0 text-secondary h5">@Model.Cart.TotalAmount.ToString("C")</p>
             </div>
         </div>
         <form method="post" class="d-none" id="cart-form" asp-page-handler="InitializePayment"></form>
@@ -111,31 +94,11 @@
         <div class="container d-flex flex-column d-lg-none gap-3">
             <div class="d-flex justify-content-between">
                 <h3 class="fw-bold mb-0">Total</h3>
-                <p class="fw-bold mb-0 text-secondary fs-4">@((cartTotal + deliveryFee).ToString("C"))</p>
+                <p class="fw-bold mb-0 text-secondary fs-4">@Model.Cart.TotalAmount.ToString("C")</p>
             </div>
-            <button class="btn cta-btn-2 fw-bold mt-2 rounded-0 w-100" type ="submit" form="cart-form">
+            <button class="btn cta-btn-2 fw-bold mt-2 rounded-0 w-100" type="submit" form="cart-form">
                 Check Out
             </button>
         </div>
     </div>
 </section>
-
-@* @section Scripts{
-    <script>
-        let formData = new FormData(form);
-        formData.append("questionId", questionId);
-        //serialize the form
-        formData = new URLSearchParams(formData).toString();
-        //submit form
-        let response = await sendPostRequest(form.action, formData).catch(function (error) {
-            if (error.message.includes("An error occurred")) {
-                //custom error thrown inside the function.
-                //showAlert(error.message.replace("Error: ", ""));
-                alert(error.message.replace("Error: ", ""));
-            } else {
-                //showAlert("A connection error occurred. please check your network and try again.");
-                alert("A connection error occurred. please check your network and try again.");
-            }
-        });
-    </script>
-} *@

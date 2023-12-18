@@ -1,43 +1,42 @@
 ﻿namespace CheckoutWithPaystack.Model
 {
-    public class CommerceItem
+    public class CartItem 
     {
-        public string Title { get; set; }
-        private string? Description { get; set; }
-        public decimal Amount { get; set; }
-        public string ImageUrl { get; set; }
-    }
-
-    public class CartItem : CommerceItem
-    {
-        public CartItem(string title, decimal amount, string imageUrl)
+        public CartItem(Product product, uint quantity)
         {
-            Title = title;
-            Amount = amount;
-            Quantity = 1;
-            ImageUrl = imageUrl;
-        }
-        public string Title { get; set; }
-        private string? Description { get; set; }
-        public int Quantity { get; private set; }
-        public decimal Amount { get; set; }
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
 
-        public void AddQuantity(int newQuantity)
-        {
-            Quantity += newQuantity;
+            if (quantity == 0) 
+                throw new ArgumentOutOfRangeException(nameof(quantity));
+
+            Product = product;
+            Quantity = quantity;
         }
 
-        public void ReduceQuantity(int newQuantity)
-        {
-            if (newQuantity > Quantity)
-            {
-                throw new InvalidOperationException("The new quantity cannot be greater than the product's current quantity, as this will result in a negative value.");
-            }
+        public Product Product { get; private set; }
+        public uint Quantity { get; private set; }
+        public decimal Amount => Product.Price * Quantity;
 
-            if (Quantity > 0)
-            {
-                Quantity -= newQuantity;
-            }
+        public uint UpdateQuantity(uint quantity)
+        {
+            if (quantity == 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity));
+
+            return Quantity = quantity;
+        }
+
+        public uint AddQuantity(uint quantity)
+        {
+            return Quantity += quantity;
+        }
+
+        public uint ReduceQuantity(uint quantity)
+        {
+            if (quantity > Quantity)
+                quantity = Quantity; //Quantity cannot be 0
+
+            return Quantity -= quantity;
         }
     }
 }
