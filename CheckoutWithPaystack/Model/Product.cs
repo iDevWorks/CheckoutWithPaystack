@@ -1,17 +1,22 @@
-﻿using CheckoutWithPaystack.Services;
-
-namespace CheckoutWithPaystack.Model
+﻿namespace CheckoutWithPaystack.Model
 {
-    public class Product : CommerceItem
+    public class Product 
     {
-        public Product(string tilte, decimal amount, string imgUrl)
+        public Product(int id, string name, decimal price, string imageUrl, string description = "")
         {
-            Id = CartService.GenerateNextProductId();
-            Title = tilte;
-            Amount = amount;
-            ImageUrl = imgUrl;
+            Id = id;
+            Name = name;
+            Price = price;
+            ImageUrl = imageUrl;
+            Description = description;
         }
 
         public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string? Description { get; set; }
+        public string ImageUrl { get; set; }
     }
+
+
 }
