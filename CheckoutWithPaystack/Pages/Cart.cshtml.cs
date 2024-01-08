@@ -52,7 +52,7 @@ namespace CheckoutWithPaystack.Pages
                     var deliveryFee = amount * DeliveryPercent ;
                     var totalAmount = amount + ((deliveryFee > 3000) ? 3000 : deliveryFee);
 
-                    cartDetail.amount = (int)totalAmount;
+                    cartDetail.amount = (int)totalAmount * 100;
 
                     //set callback url
                     cartDetail.callback_url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/PaymentComplete";
