@@ -14,7 +14,7 @@ namespace Idevworks.Utilities.PayStack
     {
         private readonly HttpClient _httpClient;
         private readonly string _testSecretKey;
-        private readonly string _baseUrl = "https://api.paystack.co/";
+        private readonly string _baseUrl = "https://api.paystack.co/transaction/";
 
         public PayStackClient(string paystackSecretKey)
         {
@@ -31,7 +31,7 @@ namespace Idevworks.Utilities.PayStack
 
             var initRequest = new TransactionInitRequest(email, amountInKobo, callbackUrl, reference);
 
-            var url = "transaction/initialize";
+            var url = "initialize";
             var response = await _httpClient.PostAsJsonAsync(url, initRequest);
             var jsonString = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<PaystackResponse<TransactionInitResponse>>(jsonString);
@@ -52,7 +52,7 @@ namespace Idevworks.Utilities.PayStack
 
         public async Task<TransactionVerifyResponse> VerifyTransaction(string reference)
         {
-            var url = $"https://api.paystack.co/transaction/verify/{reference}";
+            var url = $"verify/{reference}";
             var response = await _httpClient.GetAsync(url);
             var jsonString = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<PaystackResponse<TransactionVerifyResponse>>(jsonString);
