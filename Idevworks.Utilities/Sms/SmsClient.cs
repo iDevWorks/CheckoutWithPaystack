@@ -26,11 +26,17 @@ namespace Idevworks.Utilities.SMS
 
         public static Task<ApiResponse<SmsMessageResponse>> SendSmsAsync(string apiKey, string mobileNumber, string messageText, string senderId, string route = "", HttpClient? httpclient = null)
         {
+            var closeConnectionWhenDone = false;
+
             if (string.IsNullOrWhiteSpace(apiKey))
                 throw new ArgumentException("Please enter your api key", nameof(apiKey));
 
             if (httpclient == null)
+            {
                 httpclient = new HttpClient();
+                closeConnectionWhenDone = true;
+            }
+                
 
             httpclient.BaseAddress = new Uri(_baseUrl);
             httpclient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
