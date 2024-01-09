@@ -4,48 +4,48 @@
     {
         private readonly Dictionary<int, CartItem> _cartItems = new();
 
-        public Cart()
-        {
-        }
+        public Cart() { }
 
         public IEnumerable<CartItem> Items => _cartItems.Values;
         public decimal TotalAmount => _cartItems.Values.Sum(x => x.Quantity * x.Product.Price);
 
 
-        public void AddToCart(Product product, uint quantity)
+        public bool AddToCart(Product product, uint quantity)
         {
             //check if product exists in store
             if ( _cartItems.TryGetValue(product.Id, out CartItem? item)) {
                 item.AddQuantity(quantity);
-                return;
+                return true;
             }
 
             var cartItem = new CartItem(product, quantity);
             _cartItems.Add(product.Id, cartItem);
+            return true;
         }
 
-        public void UpdateQuantity(int productId, uint quantity)
+        public bool UpdateQuantity(int productId, uint quantity)
         {
             if (_cartItems.TryGetValue(productId, out CartItem? item))
             {
                 if (quantity == 0)
                 {
                     _cartItems.Remove(productId);
-                    return;
+                    return false;
                 }
 
                 item.UpdateQuantity(quantity);
-                return;
+                return true;
             }
-            throw new KeyNotFoundException($"Product [{productId}] was not found");
+            return false;
         }
 
-        public void RemoveFromCart(int productId)
+        public bool RemoveFromCart(int productId)
         {
             if (!_cartItems.ContainsKey(productId))
-                throw new KeyNotFoundException($"Product [{productId}] was not found");
+                return false;
 
             _cartItems.Remove(productId);
+            return true;
         }
 
     }

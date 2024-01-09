@@ -1,40 +1,29 @@
-﻿using Idevworks.Utilities.PayStack.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace Idevworks.Utilities.PayStack
+namespace iDevWorks.Paystack
 {
-    internal class PayStackClient
+    public class PaystackClient
     {
         private readonly HttpClient _httpClient;
-        private readonly string _testSecretKey;
-        private readonly string _baseUrl = "https://api.paystack.co/transaction/";
 
-        public PayStackClient(string paystackSecretKey)
+        public PaystackClient(string secretKey, HttpClient? httpClient = null)
         {
-            _testSecretKey = paystackSecretKey;
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri(_baseUrl);
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_testSecretKey}");
+            _httpClient = httpClient ?? new HttpClient();
+            _httpClient.BaseAddress = new Uri("https://api.paystack.co/transaction/");
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {secretKey}");
         }
 
-        public async Task<TransactionInitResponse> InitializeTransaction(string email, decimal totalAmount, string callbackUrl)
+        public async Task<Authorization> InitializeTransaction(string email, decimal totalAmount, string callbackUrl)
         {
             var amountInKobo = (int)totalAmount * 100;
             var reference = Guid.NewGuid().ToString();
 
-            var initRequest = new TransactionInitRequest(email, amountInKobo, callbackUrl, reference);
+            var initRequest = new Initializer(email, amountInKobo, callbackUrl, reference);
 
-            var url = "initialize";
-            var response = await _httpClient.PostAsJsonAsync(url, initRequest);
+            var response = await _httpClient.PostAsJsonAsync("initialize", initRequest);
             var jsonString = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<PaystackResponse<TransactionInitResponse>>(jsonString);
+            var result = JsonSerializer.Deserialize<Result<Authorization>>(jsonString);
 
             if (response.IsSuccessStatusCode)
             {
@@ -50,12 +39,11 @@ namespace Idevworks.Utilities.PayStack
             throw new Exception(jsonString);
         }
 
-        public async Task<TransactionVerifyResponse> VerifyTransaction(string reference)
+        public async Task<Transaction> VerifyTransaction(string reference)
         {
-            var url = $"verify/{reference}";
-            var response = await _httpClient.GetAsync(url);
+            var response = await _httpClient.GetAsync($"verify/{reference}");
             var jsonString = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<PaystackResponse<TransactionVerifyResponse>>(jsonString);
+            var result = JsonSerializer.Deserialize<Result<Transaction>>(jsonString);
 
             if (response.IsSuccessStatusCode)
             {
@@ -70,6 +58,5 @@ namespace Idevworks.Utilities.PayStack
 
             throw new Exception(jsonString);
         }
-
     }
 }

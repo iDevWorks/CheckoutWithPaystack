@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckoutWithPaystack", "CheckoutWithPaystack\CheckoutWithPaystack.csproj", "{7EB08BA3-6D56-4AC2-A7B6-C6B61259824F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idevworks.Utilities", "Idevworks.Utilities\Idevworks.Utilities.csproj", "{89C9DE7D-01FD-4700-A60B-96D5C220783A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iDevWorks.Utilities", "Idevworks.Utilities\iDevWorks.Utilities.csproj", "{89C9DE7D-01FD-4700-A60B-96D5C220783A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
