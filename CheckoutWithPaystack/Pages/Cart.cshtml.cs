@@ -2,18 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CheckoutWithPaystack.Services;
 using CheckoutWithPaystack.Model;
+using iDevWorks.Cart;
+using iDevWorks.Paystack;
 
 namespace CheckoutWithPaystack.Pages
 {
     public class CartModel : PageModel
     {
-        private readonly PaystackService _paystackService;
+        private readonly PaystackClient _paystack;
 
-        public Cart Cart { get; } 
+        public Cart<Product> Cart { get; } 
 
-        public CartModel(PaystackService paystackService, CacheService cacheService)
+        public CartModel(CacheService cacheService)
         {
-            _paystackService = paystackService;
+            _paystack = new PaystackClient("sdfsfsfsdf");
             Cart = cacheService.DemoCart;
         }
 
@@ -24,7 +26,7 @@ namespace CheckoutWithPaystack.Pages
                 try
                 {
                     var callbackUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/PaymentComplete";
-                    var result = await _paystackService.InitializeTransaction("nathan@idevworks.com", Cart.TotalAmount, callbackUrl);
+                    var result = await _paystack.InitializeTransaction("nathan@idevworks.com", Cart.TotalAmount, callbackUrl);
 
                     return Redirect(result.AuthorizationUrl);
                 }

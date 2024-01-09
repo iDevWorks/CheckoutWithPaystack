@@ -1,36 +1,31 @@
 ﻿namespace iDevWorks.Cart
 {
+    public class Cart<TProduct> : Cart where TProduct : IProduct
+    {
+        public bool AddToCart(TProduct product, uint quantity)
+        {
+            if (AddMoreQuantity(product.Id, quantity))
+                return true;
+
+            var cartItem = new CartItem<TProduct>(product, quantity);
+            _cartItems.Add(product.Id, cartItem);
+            return true;
+        }
+
+    }
+
     public class Cart 
     {
-        private readonly Dictionary<string, CartItem> _cartItems = new();
+        protected readonly Dictionary<string, CartItem> _cartItems = new();
 
         public bool AddToCart(string id, string name, decimal price, uint quantity)
         {
-            //check if product exists in store
-            if ( _cartItems.TryGetValue(id, out CartItem? item)) {
-                item.AddQuantity(quantity);
+            if (AddMoreQuantity(id, quantity))
                 return true;
-            }
 
             var cartItem = new CartItem(id, name, price, quantity);
             _cartItems.Add(id, cartItem);
             return true;
-        }
-
-        public bool UpdateQuantity(string id, uint quantity)
-        {
-            if (_cartItems.TryGetValue(id, out CartItem? item))
-            {
-                if (quantity == 0)
-                {
-                    _cartItems.Remove(id);
-                    return false;
-                }
-
-                item.UpdateQuantity(quantity);
-                return true;
-            }
-            return false;
         }
 
         public bool RemoveFromCart(string id)
@@ -40,6 +35,43 @@
 
             _cartItems.Remove(id);
             return true;
+        }
+
+        public bool AddMoreQuantity(string id, uint quantity)
+        {
+            if (_cartItems.TryGetValue(id, out CartItem? item))
+            {
+                item.AddQuantity(quantity);
+                return true;
+            }
+            return false;
+        }
+
+        public bool SubtractQuantity(string id, uint quantity)
+        {
+            if (_cartItems.TryGetValue(id, out CartItem? item))
+            {
+                item.SubtractQuantity(quantity);
+                return true;
+            }
+            return false;
+        }
+
+
+        public bool SetQuantity(string id, uint quantity)
+        {
+            if (_cartItems.TryGetValue(id, out CartItem? item))
+            {
+                if (quantity == 0)
+                {
+                    _cartItems.Remove(id);
+                    return false;
+                }
+
+                item.SetQuantity(quantity);
+                return true;
+            }
+            return false;
         }
 
         public IEnumerable<CartItem> Items => _cartItems.Values;

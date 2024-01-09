@@ -1,5 +1,16 @@
 ﻿namespace iDevWorks.Cart
 {
+    public class CartItem<TProduct> : CartItem where TProduct : IProduct
+    {
+        public CartItem(TProduct product, uint quantity)
+            :base(product.Id, product.Name, product.Price, quantity)
+        {
+            Product = product;
+        }
+
+        public TProduct? Product { get; private set; }
+    }
+
     public class CartItem 
     {
         public CartItem(string id, string name, decimal price, uint quantity)
@@ -28,7 +39,7 @@
         public uint Quantity { get; private set; }
         public decimal Amount => Price * Quantity;
 
-        public uint UpdateQuantity(uint quantity)
+        public uint SetQuantity(uint quantity)
         {
             if (quantity == 0)
                 throw new ArgumentOutOfRangeException(nameof(quantity));
@@ -41,7 +52,7 @@
             return Quantity += quantity;
         }
 
-        public uint ReduceQuantity(uint quantity)
+        public uint SubtractQuantity(uint quantity)
         {
             if (quantity > Quantity)
                 quantity = Quantity; //Quantity cannot be 0

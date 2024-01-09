@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 
-builder.Services.AddTransient<PaystackService>();
+//builder.Services.AddTransient<iDevWorks.Paystack.PaystackClient>();
 builder.Services.AddSingleton<CacheService>();
 
 var app = builder.Build();

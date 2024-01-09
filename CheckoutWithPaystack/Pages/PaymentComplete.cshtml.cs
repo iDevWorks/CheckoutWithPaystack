@@ -1,26 +1,25 @@
-using CheckoutWithPaystack.Model.Paystack;
-using CheckoutWithPaystack.Services;
+using iDevWorks.Paystack;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CheckoutWithPaystack.Pages
 {
     public class PaymentCompleteModel : PageModel
     {
-        public TransactionVerifyResponse? ResponseData { get; set; }
+        public Transaction? ResponseData { get; set; }
         public string? ErrorMessage { get; set; }
 
-        private readonly PaystackService _paystackService;
+        private readonly PaystackClient _paystack;
 
-        public PaymentCompleteModel(PaystackService paystackService)
+        public PaymentCompleteModel()
         {
-            _paystackService = paystackService;
+            _paystack = new PaystackClient("sdfsfsfsdf");
         }
 
         public async Task<PageResult> OnGetAsync(string reference)
         {
             try
             {
-                ResponseData = await _paystackService.VerifyTransaction(reference);
+                ResponseData = await _paystack.VerifyTransaction(reference);
             }
             catch (Exception ex)
             {
