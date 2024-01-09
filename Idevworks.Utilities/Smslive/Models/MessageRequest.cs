@@ -1,4 +1,4 @@
-﻿namespace iDevWorks.BulkSMS.Contracts
+﻿namespace iDevWorks.BulkSMS
 {
     internal class MessageRequest
     {

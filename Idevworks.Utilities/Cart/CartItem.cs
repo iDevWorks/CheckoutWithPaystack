@@ -2,10 +2,13 @@
 {
     public class CartItem 
     {
-        public CartItem(string itemId, decimal price, uint quantity)
+        public CartItem(string id, string name, decimal price, uint quantity)
         {
-            if (string.IsNullOrWhiteSpace(itemId))
-                throw new ArgumentNullException(nameof(itemId));
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentNullException(nameof(id));
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
 
             if (price <= 0)
                 throw new ArgumentOutOfRangeException(nameof(price));
@@ -13,12 +16,14 @@
             if (quantity == 0) 
                 throw new ArgumentOutOfRangeException(nameof(quantity));
 
-            ItemId = itemId;
+            Id = id;
+            Name = name;
             Price = price;
             Quantity = quantity;
         }
 
-        public string ItemId { get; private set; }
+        public string Id { get; private set; }
+        public string Name { get; private set; }
         public decimal Price { get; private set; }
         public uint Quantity { get; private set; }
         public decimal Amount => Price * Quantity;

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace iDevWorks.BulkSMS.Contracts
+namespace iDevWorks.BulkSMS
 {
     public class Result<T>
     {

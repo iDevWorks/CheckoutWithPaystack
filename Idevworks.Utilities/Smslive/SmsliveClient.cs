@@ -1,5 +1,4 @@
-﻿using iDevWorks.BulkSMS.Contracts;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace iDevWorks.BulkSMS
