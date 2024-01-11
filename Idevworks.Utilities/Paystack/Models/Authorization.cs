@@ -2,22 +2,15 @@
 
 namespace iDevWorks.Paystack
 {
-    public class Authorization
+    public class Authorization(string authorizationUrl, string accessCode, string reference)
     {
-        public Authorization(string authorizationUrl, string accessCode, string reference)
-        {
-            AuthorizationUrl = authorizationUrl;
-            AccessCode = accessCode;
-            Reference = reference;
-        }
-
         [JsonPropertyName("authorization_url")]
-        public string AuthorizationUrl { get; }
+        public string AuthorizationUrl { get; } = authorizationUrl;
 
         [JsonPropertyName("access_code")]
-        public string AccessCode { get; }
+        public string AccessCode { get; } = accessCode;
 
         [JsonPropertyName("reference")]
-        public string Reference { get; }
+        public string Reference { get; } = reference;
     }
 }

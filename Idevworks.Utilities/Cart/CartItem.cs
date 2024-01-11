@@ -1,31 +1,19 @@
 ﻿namespace iDevWorks.Cart
 {
-    public class CartItem<TProduct> : CartItem where TProduct : IProduct
+    public class CartItem<TProduct>(TProduct product, uint quantity) 
+        : CartItem(product.Id, product.Name, product.Price, quantity) where TProduct : IProduct
     {
-        public CartItem(TProduct product, uint quantity)
-            :base(product.Id, product.Name, product.Price, quantity)
-        {
-            Product = product;
-        }
-
-        public TProduct? Product { get; private set; }
+        public TProduct Product { get; private set; } = product;
     }
 
     public class CartItem 
     {
         public CartItem(string id, string name, decimal price, uint quantity)
         {
-            if (string.IsNullOrWhiteSpace(id))
-                throw new ArgumentNullException(nameof(id));
-
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException(nameof(name));
-
-            if (price <= 0)
-                throw new ArgumentOutOfRangeException(nameof(price));
-
-            if (quantity == 0) 
-                throw new ArgumentOutOfRangeException(nameof(quantity));
+            ArgumentException.ThrowIfNullOrWhiteSpace(id);
+            ArgumentException.ThrowIfNullOrWhiteSpace(name);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
 
             Id = id;
             Name = name;
@@ -41,8 +29,7 @@
 
         public uint SetQuantity(uint quantity)
         {
-            if (quantity == 0)
-                throw new ArgumentOutOfRangeException(nameof(quantity));
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
 
             return Quantity = quantity;
         }

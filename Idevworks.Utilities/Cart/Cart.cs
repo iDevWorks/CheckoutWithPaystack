@@ -11,12 +11,11 @@
             _cartItems.Add(product.Id, cartItem);
             return true;
         }
-
     }
 
     public class Cart 
     {
-        protected readonly Dictionary<string, CartItem> _cartItems = new();
+        protected readonly Dictionary<string, CartItem> _cartItems = [];
 
         public bool AddToCart(string id, string name, decimal price, uint quantity)
         {

@@ -2,26 +2,18 @@
 
 namespace iDevWorks.Paystack
 {
-    internal class Initializer
+    internal class Initializer(string email, int amount, string callbackUrl, string reference)
     {
-        public Initializer(string email, int amount, string callbackUrl, string reference)
-        {
-            Email = email;
-            Amount = amount;
-            CallbackUrl = callbackUrl;
-            Reference = reference;
-        }
-
         [JsonPropertyName("email")]
-        public string Email { get; }
+        public string Email { get; } = email;
 
         [JsonPropertyName("amount")]
-        public int Amount { get; }
+        public int Amount { get; } = amount;
 
         [JsonPropertyName("callback_url")]
-        public string CallbackUrl { get; }
+        public string CallbackUrl { get; } = callbackUrl;
 
         [JsonPropertyName("reference")]
-        public string Reference { get; }
+        public string Reference { get; } = reference;
     }
 }

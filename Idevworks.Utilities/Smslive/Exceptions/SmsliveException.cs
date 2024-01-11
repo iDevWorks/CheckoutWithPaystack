@@ -20,16 +20,10 @@
         public new string? Message { get; } 
         public List<ValidationError>? Errors { get; }
 
-        public class ValidationError
+        public class ValidationError(string field, string message)
         {
-            public ValidationError(string field, string message)
-            {
-                Field = field;
-                Message = message;
-            }
-
-            public string Field { get; }
-            public string Message { get; }
+            public string Field { get; } = field;
+            public string Message { get; } = message;
         }
     }    
 }

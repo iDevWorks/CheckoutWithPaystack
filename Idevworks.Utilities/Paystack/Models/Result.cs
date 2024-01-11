@@ -2,22 +2,15 @@
 
 namespace iDevWorks.Paystack
 {
-    internal class Result<T> where T : class
+    internal class Result<TResult>(bool status, string? message, TResult data) where TResult : class
     {
-        public Result(bool status, string? message, T data)
-        {
-            Status = status;
-            Message = message;
-            Data = data;
-        }
-
         [JsonPropertyName("status")]
-        public bool Status { get; }
+        public bool Status { get; } = status;
 
         [JsonPropertyName("message")]
-        public string? Message { get; }
+        public string? Message { get; } = message;
 
         [JsonPropertyName("data")]
-        public T Data { get; }
+        public TResult Data { get; } = data;
     }
 }

@@ -2,22 +2,15 @@
 
 namespace iDevWorks.Paystack
 {
-    public class Customer
+    public class Customer(string firstName, string lastName, string email)
     {
-        public Customer(string firstName, string lastName, string email)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-        }
-
         [JsonPropertyName("first_name")]
-        public string FirstName { get; }
+        public string FirstName { get; } = firstName;
 
         [JsonPropertyName("last_name")]
-        public string LastName { get; }
+        public string LastName { get; } = lastName;
 
         [JsonPropertyName("email")]
-        public string Email { get; }
+        public string Email { get; } = email;
     }
 }

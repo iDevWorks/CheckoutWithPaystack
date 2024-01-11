@@ -2,38 +2,27 @@
 
 namespace iDevWorks.Paystack
 {
-    public class Transaction
+    public class Transaction(decimal amountInKobo, string reference, string status, string message, string gatewayResponse, decimal requestedAmount, Customer customer)
     {
-        public Transaction(decimal amountInKobo, string reference, string status, string message, string gatewayResponse, decimal requestedAmount, Customer customer)
-        {
-            AmountInKobo = amountInKobo;
-            Reference = reference;
-            Status = status;
-            Message = message;
-            GatewayResponse = gatewayResponse;
-            RequestedAmount = requestedAmount;
-            Customer = customer;
-        }
-
         [JsonPropertyName("amount")]
-        public decimal AmountInKobo { get; }
+        public decimal AmountInKobo { get; } = amountInKobo;
 
         [JsonPropertyName("reference")]
-        public string Reference { get; }
+        public string Reference { get; } = reference;
 
         [JsonPropertyName("status")]
-        public string Status { get; }
+        public string Status { get; } = status;
 
         [JsonPropertyName("message")]
-        public string Message { get; }
+        public string Message { get; } = message;
 
         [JsonPropertyName("gateway_response")]
-        public string GatewayResponse { get; }
+        public string GatewayResponse { get; } = gatewayResponse;
 
         [JsonPropertyName("requested_amount")]
-        public decimal RequestedAmount { get; }
+        public decimal RequestedAmount { get; } = requestedAmount;
 
         [JsonPropertyName("customer")]
-        public Customer Customer { get; }
+        public Customer Customer { get; } = customer;
     }
 }

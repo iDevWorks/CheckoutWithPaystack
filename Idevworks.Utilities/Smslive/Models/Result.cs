@@ -2,34 +2,20 @@
 
 namespace iDevWorks.BulkSMS
 {
-    public class Result<T>
+    public class Result<T>(T data, Pager? paging)
     {
-        public Result(T data, Pager? paging)
-        {
-            Data = data;
-            Paging = paging;
-        }
-
-        public T Data { get; }
+        public T Data { get; } = data;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public Pager? Paging { get; }
+        public Pager? Paging { get; } = paging;
     }
 
-    public class Pager
+    public class Pager(int pageNo, int pageSize, int totalCount, int totalPages)
     {
-        public Pager(int pageNo, int pageSize, int totalCount, int totalPages)
-        {
-            PageNo = pageNo;
-            PageSize = pageSize;
-            TotalCount = totalCount;
-            TotalPages = totalPages;
-        }
-
-        public int PageNo { get; }
-        public int PageSize { get; }
-        public int TotalCount { get; }
-        public int TotalPages { get; }
+        public int PageNo { get; } = pageNo;
+        public int PageSize { get; } = pageSize;
+        public int TotalCount { get; } = totalCount;
+        public int TotalPages { get; } = totalPages;
     }
 
 }

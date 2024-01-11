@@ -22,41 +22,33 @@ namespace iDevWorks.Paystack
             var initRequest = new Initializer(email, amountInKobo, callbackUrl, reference);
 
             var response = await _httpClient.PostAsJsonAsync("initialize", initRequest);
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<Result<Authorization>>(jsonString);
-
-            if (response.IsSuccessStatusCode)
-            {
-                if (result != null)
-                    return result.Data;
-
-                throw new Exception(jsonString);
-            }
-
-            if (result != null)
-                throw new Exception(result.Message);
-
-            throw new Exception(jsonString);
+            return await ProcessResponse<Authorization>(response);
         }
 
         public async Task<Transaction> VerifyTransaction(string reference)
         {
             var response = await _httpClient.GetAsync($"verify/{reference}");
-            var jsonString = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<Result<Transaction>>(jsonString);
+            return await ProcessResponse<Transaction>(response);
+        }
 
-            if (response.IsSuccessStatusCode)
+        private static async Task<TResult> ProcessResponse<TResult>(HttpResponseMessage httpResponse) 
+            where TResult: class 
+        {
+            var jsonString = await httpResponse.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<Result<TResult>>(jsonString);
+
+            if (httpResponse.IsSuccessStatusCode)
             {
                 if (result != null)
                     return result.Data;
 
-                throw new Exception(jsonString);
+                throw new PaystackException(Status.REQUEST_OK_JSON_FAIL, jsonString);
             }
 
             if (result != null)
-                throw new Exception(result.Message);
+                throw new PaystackException(Status.REQUEST_FAIL_JSON_OK, result.Message);
 
-            throw new Exception(jsonString);
+            throw new PaystackException(Status.REQUEST_FAIL_JSON_FAIL, jsonString);
         }
     }
 }

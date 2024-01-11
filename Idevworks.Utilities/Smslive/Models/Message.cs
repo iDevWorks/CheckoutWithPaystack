@@ -1,40 +1,21 @@
 ﻿namespace iDevWorks.BulkSMS
 {
-    public class Message
+    public class Message(int batchID, string messageID, string senderID, string messageText, string mobileNumber, DateTime submitDate, decimal charged, List<Message.DeliveryReport> reports)
     {
-        public Message(int batchID, string messageID, string senderID, string messageText, string mobileNumber, DateTime submitDate, decimal charged, List<DeliveryReport> reports)
+        public int BatchID { get; } = batchID;
+        public string MessageID { get; } = messageID;
+        public string SenderID { get; } = senderID;
+        public string MessageText { get; } = messageText;
+        public string MobileNumber { get; } = mobileNumber;
+        public DateTime SubmitDate { get; } = submitDate;
+        public decimal Charged { get; } = charged;
+        public List<DeliveryReport> Reports { get; } = reports;
+
+        public class DeliveryReport(string status, string smscID, DateTime? reportDate)
         {
-            BatchID = batchID;
-            MessageID = messageID;
-            SenderID = senderID;
-            MessageText = messageText;
-            MobileNumber = mobileNumber;
-            SubmitDate = submitDate;
-            Charged = charged;
-            Reports = reports;
-        }
-
-        public int BatchID { get; }
-        public string MessageID { get; }
-        public string SenderID { get; }
-        public string MessageText { get; }
-        public string MobileNumber { get; }
-        public DateTime SubmitDate { get; }
-        public decimal Charged { get; }
-        public List<DeliveryReport> Reports { get; }
-
-        public class DeliveryReport
-        {
-            public DeliveryReport(string status, string smscID, DateTime? reportDate)
-            {
-                Status = status;
-                SmscID = smscID;
-                ReportDate = reportDate;
-            }
-
-            public string Status { get; }
-            public string SmscID { get; }
-            public DateTime? ReportDate { get; }
+            public string Status { get; } = status;
+            public string SmscID { get; } = smscID;
+            public DateTime? ReportDate { get; } = reportDate;
         }
     }
 }

@@ -1,24 +1,11 @@
-﻿using System.Text.Json.Serialization;
-
-namespace iDevWorks.BulkSMS
+﻿namespace iDevWorks.BulkSMS
 {
-    public class Sender
+    public class Sender(int requestId, DateTime requestDate, DateTime? approvalDate, string senderId, string status)
     {
-        public Sender(int requestId, DateTime requestDate, DateTime? approvalDate, string senderId, string status)
-        {
-            RequestId = requestId;
-            RequestDate = requestDate;
-            ApprovalDate = approvalDate;
-            SenderId = senderId;
-            Status = status;
-        }
-
-        public int RequestId { get; }
-        public DateTime RequestDate { get; }
-        public DateTime? ApprovalDate { get; }
-
-        [JsonPropertyName("SenderId")]
-        public string SenderId { get; }
-        public string Status { get; }
+        public int RequestId { get; } = requestId;
+        public DateTime RequestDate { get; } = requestDate;
+        public DateTime? ApprovalDate { get; } = approvalDate;
+        public string SenderId { get; } = senderId;
+        public string Status { get; } = status;
     }
 }
