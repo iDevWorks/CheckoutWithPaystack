@@ -2,22 +2,13 @@
 
 namespace CheckoutWithPaystack.Model
 {
-    public class Product : IProduct
+    public class Product(int id, string name, decimal price, string imageUrl, string description = "") : IProduct
     {
-        public Product(int id, string name, decimal price, string imageUrl, string description = "")
-        {
-            Id = id.ToString();
-            Name = name;
-            Price = price;
-            ImageUrl = imageUrl;
-            Description = description;
-        }
-
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string? Description { get; set; }
-        public string ImageUrl { get; set; }
+        public string Id { get; set; } = id.ToString();
+        public string Name { get; set; } = name;
+        public decimal Price { get; set; } = price;
+        public string? Description { get; set; } = description;
+        public string ImageUrl { get; set; } = imageUrl;
     }
 
 

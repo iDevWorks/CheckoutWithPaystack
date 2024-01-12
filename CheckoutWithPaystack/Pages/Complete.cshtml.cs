@@ -3,23 +3,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CheckoutWithPaystack.Pages
 {
-    public class PaymentCompleteModel : PageModel
+    public class PaymentCompleteModel(PaystackClient paystack) : PageModel
     {
         public Transaction? ResponseData { get; set; }
         public string? ErrorMessage { get; set; }
-
-        private readonly PaystackClient _paystack;
-
-        public PaymentCompleteModel()
-        {
-            _paystack = new PaystackClient("sdfsfsfsdf");
-        }
 
         public async Task<PageResult> OnGetAsync(string reference)
         {
             try
             {
-                ResponseData = await _paystack.VerifyTransaction(reference);
+                ResponseData = await paystack.VerifyTransaction(reference);
             }
             catch (Exception ex)
             {

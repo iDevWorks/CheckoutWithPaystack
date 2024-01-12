@@ -4,14 +4,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CheckoutWithPaystack.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel(Cache cacheService) : PageModel
     {
-        public IEnumerable<Product> Products => _cacheService.Products;
-        public CacheService _cacheService;
-
-        public IndexModel(CacheService cacheService)
-        {
-            _cacheService = cacheService;
-        }
+        public IEnumerable<Product> Products => cacheService.Products;
     }
 }

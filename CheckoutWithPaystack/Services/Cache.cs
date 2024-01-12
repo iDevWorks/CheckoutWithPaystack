@@ -3,14 +3,14 @@ using iDevWorks.Cart;
 
 namespace CheckoutWithPaystack.Services
 {
-    public class CacheService
+    public class Cache
     {
         public IEnumerable<Cart<Product>> Carts { get; }
         public IEnumerable<Product> Products { get; }
 
         public Cart<Product> DemoCart => Carts.ToArray()[0];
 
-        public CacheService()
+        public Cache()
         {
             Products = new List<Product> {
                 new(1, "Blue Washed Denim Button Up Jacket", 10000, "images/image-product-1-removebg-preview.png"),
