@@ -24,5 +24,7 @@ namespace iDevWorks.Paystack
 
         [JsonPropertyName("customer")]
         public Customer Customer { get; } = customer;
+
+        public bool IsSuccessful => Status == "success";
     }
 }
