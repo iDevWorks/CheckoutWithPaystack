@@ -9,6 +9,8 @@ namespace iDevWorks.BulkSMS
 
         public SmsliveClient(string apiKey, HttpClient? httpClient = null)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(apiKey);
+
             _httpClient = httpClient ?? new HttpClient();
             _httpClient.BaseAddress = new Uri("https://api.smslive247.com");
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
@@ -50,6 +52,8 @@ namespace iDevWorks.BulkSMS
 
         public Task<Result<Message>> GetMessage(string messageId)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(messageId);
+
             var url = $"/api/v4/sms/{messageId}";
             return SendGetRequest<Result<Message>>(_httpClient, url);
         }
@@ -57,6 +61,10 @@ namespace iDevWorks.BulkSMS
         public Task<Result<Message>> SendMessage(string mobileNumber, 
             string messageText, string senderId, string route = "")
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(mobileNumber);
+            ArgumentException.ThrowIfNullOrWhiteSpace(messageText);
+            ArgumentException.ThrowIfNullOrWhiteSpace(senderId);
+
             var body = new MessageRequest
             {
                 MessageText = messageText,
@@ -93,6 +101,12 @@ namespace iDevWorks.BulkSMS
         public Task<Result<Campaign>> SendCampaign(string messageText, string senderId, 
             string[] mobileNumbers, DateTime? deliveryTime = null, string route = "")
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(messageText);
+            ArgumentException.ThrowIfNullOrWhiteSpace(senderId);
+
+            ArgumentNullException.ThrowIfNull(mobileNumbers);
+            ArgumentOutOfRangeException.ThrowIfZero(mobileNumbers.Length);
+
             var body = new CampaignRequest
             {
                 MessageText = messageText,

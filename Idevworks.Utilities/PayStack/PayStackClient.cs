@@ -9,16 +9,21 @@ namespace iDevWorks.Paystack
 
         public PaystackClient(string secretKey, HttpClient? httpClient = null)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(secretKey);
+
             _httpClient = httpClient ?? new HttpClient();
             _httpClient.BaseAddress = new Uri("https://api.paystack.co/transaction/");
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {secretKey}");
         }
 
-        public async Task<Authorization> InitializeTransaction(string email, decimal totalAmount, string callbackUrl)
+        public async Task<Authorization> InitializeTransaction(string email, decimal amount, string callbackUrl, string reference)
         {
-            var amountInKobo = (int)totalAmount * 100;
-            var reference = Guid.NewGuid().ToString();
+            ArgumentException.ThrowIfNullOrWhiteSpace(email);
+            ArgumentException.ThrowIfNullOrWhiteSpace(callbackUrl);
+            ArgumentException.ThrowIfNullOrWhiteSpace(reference);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
 
+            var amountInKobo = (int)amount * 100;
             var initRequest = new Initializer(email, amountInKobo, callbackUrl, reference);
 
             var response = await _httpClient.PostAsJsonAsync("initialize", initRequest);
@@ -27,6 +32,8 @@ namespace iDevWorks.Paystack
 
         public async Task<Transaction> VerifyTransaction(string reference)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(reference);
+
             var response = await _httpClient.GetAsync($"verify/{reference}");
             return await ProcessResponse<Transaction>(response);
         }
