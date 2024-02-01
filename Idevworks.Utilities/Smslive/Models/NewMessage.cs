@@ -1,6 +1,6 @@
 ﻿namespace iDevWorks.BulkSMS
 {
-    internal class MessageRequest
+    internal class NewMessage
     {
         public string SenderID { get; init; } = string.Empty;
         public string MessageText { get; init; } = string.Empty;

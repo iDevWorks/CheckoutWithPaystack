@@ -65,7 +65,7 @@ namespace iDevWorks.BulkSMS
             ArgumentException.ThrowIfNullOrWhiteSpace(messageText);
             ArgumentException.ThrowIfNullOrWhiteSpace(senderId);
 
-            var body = new MessageRequest
+            var body = new NewMessage
             {
                 MessageText = messageText,
                 MobileNumber = mobileNumber,
@@ -73,7 +73,7 @@ namespace iDevWorks.BulkSMS
                 Route = route
             };
 
-            return SendPostRequest<MessageRequest, Result<Message>>
+            return SendPostRequest<NewMessage, Result<Message>>
                 (_httpClient, "/api/v4/sms", body);
         }
 
@@ -107,7 +107,7 @@ namespace iDevWorks.BulkSMS
             ArgumentNullException.ThrowIfNull(mobileNumbers);
             ArgumentOutOfRangeException.ThrowIfZero(mobileNumbers.Length);
 
-            var body = new CampaignRequest
+            var body = new NewCampaign
             {
                 MessageText = messageText,
                 MobileNumbers = [.. mobileNumbers],
@@ -116,7 +116,7 @@ namespace iDevWorks.BulkSMS
                 Route = route
             };
 
-            return SendPostRequest<CampaignRequest, Result<Campaign>>
+            return SendPostRequest<NewCampaign, Result<Campaign>>
                 (_httpClient, "/api/v4/sms/batch", body);
         }
 
