@@ -4,7 +4,7 @@
     {
         public string AppName { get; } = appName;
         public string Username { get; } = username;
-        public Guid ApiKey { get; } = apiKey;
         public int TimeZone { get; } = timeZone;
+        public Guid ApiKey { get; } = apiKey;
     }
 }

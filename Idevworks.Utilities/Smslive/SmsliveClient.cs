@@ -186,7 +186,7 @@ namespace iDevWorks.BulkSMS
 
             if (!httpResponse.IsSuccessStatusCode)
             {
-                var errResult = JsonSerializer.Deserialize<SmsliveException>(jsonString);
+                var errResult = JsonSerializer.Deserialize<SmsliveException>(jsonString, Common.JsonOptions);
 
                 if (errResult != null)
                     throw errResult;

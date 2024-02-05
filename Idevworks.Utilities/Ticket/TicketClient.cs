@@ -118,7 +118,7 @@ namespace iDevWorks.Ticket
         where TResult : class
         {
             var jsonString = await httpResponse.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<TResult>(jsonString);
+            var result = JsonSerializer.Deserialize<TResult>(jsonString, Common.JsonOptions);
 
             if (httpResponse.IsSuccessStatusCode)
             {

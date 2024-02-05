@@ -42,7 +42,7 @@ namespace iDevWorks.Paystack
             where TResult: class 
         {
             var jsonString = await httpResponse.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<Result<TResult>>(jsonString);
+            var result = JsonSerializer.Deserialize<Result<TResult>>(jsonString, Common.JsonOptions);
 
             if (httpResponse.IsSuccessStatusCode)
             {

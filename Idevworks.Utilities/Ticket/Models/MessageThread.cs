@@ -1,13 +1,13 @@
 ﻿namespace iDevWorks.Ticket
 {
-    public class MessageThread
+    public class MessageThread(Guid threadId, string subject, string lastSenderId, string lastMessageBody, DateTime lastMessageDate, int totalMessages, bool isRead)
     {
-        public Guid ThreadId { get;  }
-        public string Subject { get; }
-        public string LastSenderId { get;  }
-        public string LastMessageBody { get;  }
-        public DateTime LastMessageDate { get;  }
-        public int TotalMessages { get;  }
-        public bool IsRead { get; }
+        public Guid ThreadId { get; } = threadId;
+        public string Subject { get; } = subject;
+        public string LastSenderId { get; } = lastSenderId;
+        public string LastMessageBody { get; } = lastMessageBody;
+        public DateTime LastMessageDate { get; } = lastMessageDate;
+        public int TotalMessages { get; } = totalMessages;
+        public bool IsRead { get; } = isRead;
     }
 }

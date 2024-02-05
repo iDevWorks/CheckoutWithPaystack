@@ -17,8 +17,9 @@ namespace CheckoutWithPaystack.Pages
             {
                 try
                 {
+                    var reference = Guid.NewGuid().ToString();
                     var callbackUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/Complete";
-                    var result = await paystack.InitializeTransaction("nathan@idevworks.com", Cart.TotalAmount, callbackUrl);
+                    var result = await paystack.InitializeTransaction("nathan@idevworks.com", Cart.TotalAmount, callbackUrl, reference);
 
                     return Redirect(result.AuthorizationUrl);
                 }
