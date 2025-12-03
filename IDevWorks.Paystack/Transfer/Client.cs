@@ -18,6 +18,20 @@ public class Client(PaystackClient paystack)
         return paystack.PostAsync<RecipientData>("transferrecipient", payload);
     }
 
+    public Task<RecipientData> FetchRecipient(string code)
+    {
+        var payload = new
+        {
+            type = "nuban",
+            //name,
+            //account_number = accountNumber,
+            //bank_code = bankCode,
+            currency = "NGN"
+        };
+
+        return paystack.PostAsync<RecipientData>("transferrecipient", payload);
+    }
+
     public Task<TransferData> InitializeTransfer(decimal amount, string recipientCode, string reason, string reference)
     {
         var payload = new
