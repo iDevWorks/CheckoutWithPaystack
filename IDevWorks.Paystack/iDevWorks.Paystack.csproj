@@ -4,11 +4,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>iDevWorks.Utilities</PackageId>
-    <Title>iDevWorks Utilities</Title>
-    <Authors>iDevWorks</Authors>
-    <Version>2.2.0</Version>
   </PropertyGroup>
 
 </Project>
