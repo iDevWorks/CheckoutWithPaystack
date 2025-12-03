@@ -1,4 +1,4 @@
-﻿namespace iDevWorks.Paystack.Exceptions
+﻿namespace iDevWorks.Paystack
 {
     internal class PaystackException(Status code, string? message) : Exception
     {

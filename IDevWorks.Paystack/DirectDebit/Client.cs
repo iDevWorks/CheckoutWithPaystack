@@ -1,10 +1,8 @@
-using System.Text.Json.Serialization;
-
 namespace iDevWorks.Paystack.DirectDebit;
 
 public class Client(PaystackClient paystack)
 {
-    public Task<AuthInitData> InitializeAuthorization(string email, string accountNumber, string bankCode)
+    public Task<AuthInitResponse> InitializeAuthorization(string email, string accountNumber, string bankCode, string callbackUrl = "https://your-app.com/callback")
     {
         var payload = new
         {
@@ -15,15 +13,32 @@ public class Client(PaystackClient paystack)
                 bank_code = bankCode,
                 number = accountNumber
             },
-            callback_url = "https://your-app.com/callback"
+            callback_url = callbackUrl,
         };
 
-        return paystack.PostAsync<AuthInitData>("customer/authorization/initialize", payload);
+        return paystack.PostAsync<AuthInitResponse>("customer/authorization/initialize", payload);
     }
 
-    public Task<AuthorizationData> VerifyAuthorization(string reference)
+    public Task<AuthVerifyResponse> VerifyAuthorization(string reference)
     {
-        return paystack.GetAsync<AuthorizationData>($"customer/authorization/verify/{reference}");
+        return paystack.GetAsync<AuthVerifyResponse>($"customer/authorization/verify/{reference}");
+    }
+
+    public Task<ChargeResponse> ChargeAccount(string authorizationCode, string email, decimal amount)
+    {
+        var payload = new
+        {
+            email,
+            authorization_code = authorizationCode,
+            amount = (int)(amount * 100) // Convert to kobo
+        };
+
+        return paystack.PostAsync<ChargeResponse>("transaction/charge_authorization", payload);
+    }
+
+    public Task<ChargeResponse> VerifyCharge(string reference)
+    {
+        return paystack.GetAsync<ChargeResponse>($"transaction/verify/{reference}");
     }
 
     public async Task DeactivateAuthorization(string authorizationCode)
@@ -31,23 +46,4 @@ public class Client(PaystackClient paystack)
         var payload = new { authorization_code = authorizationCode };
         await paystack.PostAsync<string>("customer/authorization/deactivate", payload);
     }
-
-    public Task<ChargeData> ChargeAccount(string authorizationCode, string email, decimal amount)
-    {
-        var payload = new
-        {
-            authorization_code = authorizationCode,
-            email,
-            amount = (int)(amount * 100) // Convert to kobo
-        };
-
-        return paystack.PostAsync<ChargeData>("transaction/charge_authorization", payload);
-    }
-
-    public Task<ChargeData> VerifyCharge(string reference)
-    {
-        return paystack.GetAsync<ChargeData>($"transaction/verify/{reference}");
-    }
-
-
 }

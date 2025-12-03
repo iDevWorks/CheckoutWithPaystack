@@ -1,23 +1,13 @@
-﻿using iDevWorks.Paystack.Exceptions;
-using iDevWorks.Paystack.Transaction.Models;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace iDevWorks.Paystack
 {
     public class PaystackClient
     {
-        private readonly HttpClient _httpClient;
-
         public DirectDebit.Client DirectDebit { get; }
         public Transaction.Client Transaction { get; }
         public Transfer.Client Transfer { get; }
-
-        private static readonly JsonSerializerOptions jsonOptions = new()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-        };
 
         public PaystackClient(string secretKey, HttpClient? httpClient = null)
         {
@@ -26,6 +16,7 @@ namespace iDevWorks.Paystack
             _httpClient = httpClient ?? new HttpClient();
             _httpClient.BaseAddress = new Uri("https://api.paystack.co/");
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {secretKey}");
+
             DirectDebit = new DirectDebit.Client(this);
             Transaction = new Transaction.Client(this);
             Transfer = new Transfer.Client(this);
@@ -43,13 +34,10 @@ namespace iDevWorks.Paystack
             return ProcessResponse<TResult>(response).Result;
         }
 
-
-        private static async Task<TResult> ProcessResponse<TResult>(HttpResponseMessage httpResponse) 
-            where TResult: class 
+        private static async Task<TResult> ProcessResponse<TResult>(HttpResponseMessage httpResponse) where TResult: class 
         {
-            
             var jsonString = await httpResponse.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<Result<TResult>>(jsonString, jsonOptions);
+            var result = JsonSerializer.Deserialize<Result<TResult>>(jsonString, _jsonOptions);
 
             if (httpResponse.IsSuccessStatusCode)
             {
@@ -65,6 +53,11 @@ namespace iDevWorks.Paystack
             throw new PaystackException(Status.REQUEST_FAIL_JSON_FAIL, jsonString);
         }
 
-        
+        private readonly HttpClient _httpClient;
+        private static readonly JsonSerializerOptions _jsonOptions = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        };
     }
 }

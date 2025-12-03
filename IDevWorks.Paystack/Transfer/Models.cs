@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace iDevWorks.Paystack.Transfer
 {
-    //public class CreateRecipientResponse //: PaystackBaseResponse
-    //{
-    //    [JsonPropertyName("data")]
-    //    public RecipientData? Data { get; set; }
-    //}
-
-    public class RecipientData
+    public class RecipientResponse
     {
         [JsonPropertyName("recipient_code")]
         public string RecipientCode { get; set; } = string.Empty;
@@ -22,13 +11,7 @@ namespace iDevWorks.Paystack.Transfer
         public string Name { get; set; } = string.Empty;
     }
 
-    //public class InitializeTransferResponse //: PaystackBaseResponse
-    //{
-    //    [JsonPropertyName("data")]
-    //    public TransferData? Data { get; set; }
-    //}
-
-    public class TransferData
+    public class InitTransferResponse
     {
         [JsonPropertyName("transfer_code")]
         public string TransferCode { get; set; } = string.Empty;
@@ -42,13 +25,7 @@ namespace iDevWorks.Paystack.Transfer
         public string? Reference { get; set; }
     }
 
-    //public class VerifyTransferResponse //: PaystackBaseResponse
-    //{
-    //    [JsonPropertyName("data")]
-    //    public VerifyTransferData? Data { get; set; }
-    //}
-
-    public class VerifyTransferData
+    public class VerifyTransferResponse
     {
         [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
@@ -105,13 +82,7 @@ namespace iDevWorks.Paystack.Transfer
         public string BankName { get; set; } = string.Empty;
     }
 
-    //public class BulkTransferResponse //: PaystackBaseResponse
-    //{
-    //    [JsonPropertyName("data")]
-    //    public List<BulkTransferItemResponse> Data { get; set; } = [];
-    //}
-
-    public class BulkTransferItemResponse
+    public class InitBulkTransferResponse
     {
         [JsonPropertyName("reference")]
         public string Reference { get; set; } = string.Empty;
@@ -119,7 +90,6 @@ namespace iDevWorks.Paystack.Transfer
         [JsonPropertyName("recipient")]
         public string Recipient { get; set; } = string.Empty;
 
-        // Amount in kobo as returned by Paystack
         [JsonPropertyName("amount")]
         public long Amount { get; set; }
 

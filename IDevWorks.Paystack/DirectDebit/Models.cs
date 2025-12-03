@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace iDevWorks.Paystack.DirectDebit
 {
-    //public class InitializeAuthorizationResponse //: PaystackBaseResponse
-    //{
-    //    [JsonPropertyName("data")]
-    //    public AuthInitData? Data { get; set; }
-    //}
-
-    public class AuthInitData
+    public class AuthInitResponse
     {
         [JsonPropertyName("redirect_url")]
         public string RedirectUrl { get; set; } = string.Empty;
@@ -22,13 +11,7 @@ namespace iDevWorks.Paystack.DirectDebit
         public string Reference { get; set; } = string.Empty;
     }
 
-    //public class VerifyAuthorizationResponse //: PaystackBaseResponse
-    //{
-    //    [JsonPropertyName("data")]
-    //    public AuthorizationData? Data { get; set; }
-    //}
-
-    public class AuthorizationData
+    public class AuthVerifyResponse
     {
         [JsonPropertyName("authorization_code")]
         public string AuthorizationCode { get; set; } = string.Empty;
@@ -43,10 +26,10 @@ namespace iDevWorks.Paystack.DirectDebit
         public bool Active { get; set; }
 
         [JsonPropertyName("customer")]
-        public AuthorizationCustomerData? Customer { get; set; }
+        public AuthCustomerResponse? Customer { get; set; }
     }
 
-    public class AuthorizationCustomerData
+    public class AuthCustomerResponse
     {
         [JsonPropertyName("code")]
         public string Code { get; set; } = string.Empty;
@@ -55,19 +38,8 @@ namespace iDevWorks.Paystack.DirectDebit
         public string Email { get; set; } = string.Empty;
     }
 
-    //public class DeactivateAuthorizationResponse //: PaystackBaseResponse
-    //{
-    //}
-
-    //public class ChargeAccountResponse //: PaystackBaseResponse
-    //{
-    //    [JsonPropertyName("data")]
-    //    public ChargeData? Data { get; set; }
-    //}
-
-    public class ChargeData
+    public class ChargeResponse
     {
-        // Amount in kobo (lowest currency unit)
         [JsonPropertyName("amount")]
         public long Amount { get; set; }
 
@@ -93,13 +65,13 @@ namespace iDevWorks.Paystack.DirectDebit
         public long? Fees { get; set; }
 
         [JsonPropertyName("authorization")]
-        public ChargeAuthorizationData? Authorization { get; set; }
+        public ChargeAuthResponse? Authorization { get; set; }
 
         [JsonPropertyName("customer")]
-        public ChargeCustomerData? Customer { get; set; }
+        public ChargeCustomerResponse? Customer { get; set; }
     }
 
-    public class ChargeAuthorizationData
+    public class ChargeAuthResponse
     {
         [JsonPropertyName("authorization_code")]
         public string AuthorizationCode { get; set; } = string.Empty;
@@ -135,7 +107,7 @@ namespace iDevWorks.Paystack.DirectDebit
         public bool Reusable { get; set; }
     }
 
-    public class ChargeCustomerData
+    public class ChargeCustomerResponse
     {
         [JsonPropertyName("id")]
         public long Id { get; set; }
@@ -146,10 +118,4 @@ namespace iDevWorks.Paystack.DirectDebit
         [JsonPropertyName("customer_code")]
         public string CustomerCode { get; set; } = string.Empty;
     }
-
-    //public class VerifyChargeResponse //: PaystackBaseResponse
-    //{
-    //    [JsonPropertyName("data")]
-    //    public ChargeData? Data { get; set; }
-    //}
 }
