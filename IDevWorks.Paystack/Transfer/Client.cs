@@ -2,7 +2,7 @@ namespace iDevWorks.Paystack.Transfer;
 
 public class Client(PaystackClient paystack)
 {
-    public Task<BalanceResponse> GetWalletBalance()
+    public Task<BalanceResponse> GetBalance()
     {
         return paystack.GetAsync<BalanceResponse>("balance");
     }
@@ -66,8 +66,8 @@ public class Client(PaystackClient paystack)
 
 public class TransferItem
 {
-    public decimal Amount { get; set; }
-    public string Reason { get; set; } = string.Empty;
-    public string Reference { get; set; } = string.Empty;
-    public string RecipientCode { get; set; } = string.Empty;
+    public decimal Amount { get; init; }
+    public string Reason { get; init; } = string.Empty;
+    public string Reference { get; init; } = string.Empty;
+    public string RecipientCode { get; init; } = string.Empty;
 }
