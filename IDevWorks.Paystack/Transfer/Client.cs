@@ -2,9 +2,11 @@ namespace iDevWorks.Paystack.Transfer;
 
 public class Client(PaystackClient paystack)
 {
-    public Task<BalanceResponse> GetWalletBalance()
+    public async Task<BalanceResponse> GetWalletBalance()
     {
-        return paystack.GetAsync<BalanceResponse>("balance");
+        var response = await paystack.GetAsync<IEnumerable<BalanceResponse>>("balance");
+        return response.First();
+
     }
 
     public Task<RecipientResponse> CreateRecipient(string name, string accountNumber, string bankCode)
