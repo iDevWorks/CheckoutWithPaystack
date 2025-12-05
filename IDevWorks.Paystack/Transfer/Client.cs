@@ -2,11 +2,9 @@ namespace iDevWorks.Paystack.Transfer;
 
 public class Client(PaystackClient paystack)
 {
-    public async Task<BalanceResponse> GetWalletBalance()
+    public Task<BalanceResponse> GetBalance()
     {
-        var response = await paystack.GetAsync<IEnumerable<BalanceResponse>>("balance");
-        return response.First();
-
+        return paystack.GetAsync<BalanceResponse>("balance");
     }
 
     public Task<RecipientResponse> CreateRecipient(string name, string accountNumber, string bankCode)
@@ -53,7 +51,7 @@ public class Client(PaystackClient paystack)
                 t.Reason,
                 t.Reference,
                 recipient = t.RecipientCode,
-                amount = (int)(t.Amount * 100), 
+                amount = (int)(t.Amount * 100),
             })
         };
 
@@ -68,8 +66,8 @@ public class Client(PaystackClient paystack)
 
 public class TransferItem
 {
-    public decimal Amount { get; set; }
-    public string Reason { get; set; } = string.Empty;
-    public string Reference { get; set; } = string.Empty;
-    public string RecipientCode { get; set; } = string.Empty;
+    public decimal Amount { get; init; }
+    public string Reason { get; init; } = string.Empty;
+    public string Reference { get; init; } = string.Empty;
+    public string RecipientCode { get; init; } = string.Empty;
 }
