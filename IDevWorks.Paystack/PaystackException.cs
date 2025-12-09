@@ -1,12 +1,12 @@
 ﻿namespace iDevWorks.Paystack
 {
-    internal class PaystackException(Status code, string? message) : Exception
+    public class PaystackException(Status code, string? message) : Exception
     {
         public Status Code { get; } = code;
         public new string? Message { get; } = message;
     }
 
-    internal enum Status
+    public enum Status
     {
         REQUEST_OK_JSON_OK = 0,
         REQUEST_OK_JSON_FAIL = 550,

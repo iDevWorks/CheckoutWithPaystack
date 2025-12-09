@@ -5,10 +5,17 @@ namespace iDevWorks.Paystack.Transfer
 
     public class BalanceResponse
     {
+        [JsonConstructor]
+        public BalanceResponse(long balance, string currency)
+        {
+            Balance = balance / 100;
+            Currency = currency;
+        }
+
         [JsonPropertyName("balance")]
-        public long Balance { get; set; }
+        public long Balance { get; } 
         [JsonPropertyName("currency")]
-        public string Currency { get; set; } = string.Empty;
+        public string Currency { get; }
     }
 
     public class RecipientResponse

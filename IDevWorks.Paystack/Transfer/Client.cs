@@ -51,7 +51,7 @@ public class Client(PaystackClient paystack)
                 t.Reason,
                 t.Reference,
                 recipient = t.RecipientCode,
-                amount = (int)(t.Amount * 100), 
+                amount = (int)(t.Amount * 100),
             })
         };
 
