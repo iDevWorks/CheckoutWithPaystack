@@ -41,7 +41,7 @@ namespace iDevWorks.Paystack.DirectDebit
     public class ChargeResponse
     {
         [JsonPropertyName("amount")]
-        public long Amount { get; set; } //should be in kobo/cents
+        public long AmountInKobo { get; set; } 
 
         [JsonPropertyName("currency")]
         public string Currency { get; set; } = string.Empty;

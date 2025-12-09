@@ -5,17 +5,11 @@ namespace iDevWorks.Paystack.Transfer
 
     public class BalanceResponse
     {
-        [JsonConstructor]
-        public BalanceResponse(long balance, string currency)
-        {
-            Balance = balance / 100;
-            Currency = currency;
-        }
-
         [JsonPropertyName("balance")]
-        public long Balance { get; } 
+        public long BalanceInKobo { get; set; } 
+
         [JsonPropertyName("currency")]
-        public string Currency { get; }
+        public string Currency { get; set; } = string.Empty;
     }
 
     public class RecipientResponse
@@ -35,7 +29,7 @@ namespace iDevWorks.Paystack.Transfer
         [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
         [JsonPropertyName("amount")]
-        public long Amount { get; set; }
+        public long AmountInKobo { get; set; }
 
         [JsonPropertyName("reference")]
         public string? Reference { get; set; }
@@ -47,7 +41,7 @@ namespace iDevWorks.Paystack.Transfer
         public string Status { get; set; } = string.Empty;
 
         [JsonPropertyName("amount")]
-        public long Amount { get; set; }
+        public long AmountInKobo { get; set; }
 
         [JsonPropertyName("currency")]
         public string Currency { get; set; } = string.Empty;
@@ -107,7 +101,7 @@ namespace iDevWorks.Paystack.Transfer
         public string Recipient { get; set; } = string.Empty;
 
         [JsonPropertyName("amount")]
-        public long Amount { get; set; }
+        public long AmountInKobo { get; set; }
 
         [JsonPropertyName("transfer_code")]
         public string TransferCode { get; set; } = string.Empty;
