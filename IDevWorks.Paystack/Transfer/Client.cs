@@ -9,6 +9,10 @@ public class Client(PaystackClient paystack)
 
     public Task<RecipientResponse> CreateRecipient(string name, string accountNumber, string bankCode)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(accountNumber);
+        ArgumentException.ThrowIfNullOrWhiteSpace(bankCode);
+
         var payload = new
         {
             name,
@@ -23,11 +27,18 @@ public class Client(PaystackClient paystack)
 
     public Task<RecipientResponse> FetchRecipient(string recipientCode)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(recipientCode);
+
         return paystack.GetAsync<RecipientResponse>($"transferrecipient/{recipientCode}");
     }
 
     public Task<InitTransferResponse> InitiateTransfer(string recipientCode, decimal amount, string reason, string reference)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(recipientCode);
+        ArgumentException.ThrowIfNullOrWhiteSpace(reference);
+        ArgumentException.ThrowIfNullOrWhiteSpace(reason);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
+
         var payload = new
         {
             reason,
@@ -40,8 +51,11 @@ public class Client(PaystackClient paystack)
         return paystack.PostAsync<InitTransferResponse>("transfer", payload);
     }
 
-    public Task<List<InitBulkTransferResponse>> InitiateBulkTransfer(IEnumerable<TransferItem> transfers)
+    public Task<List<InitTransferResponse>> InitiateBulkTransfer(IEnumerable<TransferItem> transfers)
     {
+        ArgumentNullException.ThrowIfNull(transfers);
+        ArgumentOutOfRangeException.ThrowIfZero(transfers.Count());
+
         var payload = new
         {
             currency = "NGN",
@@ -55,11 +69,13 @@ public class Client(PaystackClient paystack)
             })
         };
 
-        return paystack.PostAsync<List<InitBulkTransferResponse>>("transfer/bulk", payload);
+        return paystack.PostAsync<List<InitTransferResponse>>("transfer/bulk", payload);
     }
 
     public Task<VerifyTransferResponse> VerifyTransfer(string reference)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(reference);
+
         return paystack.GetAsync<VerifyTransferResponse>($"transfer/verify/{reference}");
     }
 }

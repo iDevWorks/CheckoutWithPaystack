@@ -4,6 +4,10 @@ public class Client(PaystackClient paystack)
 {
     public Task<AuthInitResponse> InitializeAuthorization(string email, string accountNumber, string bankCode, string callbackUrl = "https://your-app.com/callback")
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(email);
+        ArgumentException.ThrowIfNullOrWhiteSpace(accountNumber);
+        ArgumentException.ThrowIfNullOrWhiteSpace(bankCode);
+
         var payload = new
         {
             email,
@@ -21,11 +25,17 @@ public class Client(PaystackClient paystack)
 
     public Task<AuthVerifyResponse> VerifyAuthorization(string reference)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(reference);
+
         return paystack.GetAsync<AuthVerifyResponse>($"customer/authorization/verify/{reference}");
     }
 
     public Task<ChargeResponse> ChargeAccount(string authorizationCode, string email, decimal amount)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(email);
+        ArgumentException.ThrowIfNullOrWhiteSpace(authorizationCode);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
+
         var payload = new
         {
             email,
@@ -38,11 +48,15 @@ public class Client(PaystackClient paystack)
 
     public Task<ChargeResponse> VerifyCharge(string reference)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(reference);
+
         return paystack.GetAsync<ChargeResponse>($"transaction/verify/{reference}");
     }
 
     public async Task DeactivateAuthorization(string authorizationCode)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(authorizationCode);
+
         var payload = new { authorization_code = authorizationCode };
         await paystack.PostAsync<string>("customer/authorization/deactivate", payload);
     }

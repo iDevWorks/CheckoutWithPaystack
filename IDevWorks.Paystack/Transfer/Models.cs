@@ -12,27 +12,48 @@ namespace iDevWorks.Paystack.Transfer
         public string Currency { get; set; } = string.Empty;
     }
 
-    public class RecipientResponse
-    {
-        [JsonPropertyName("recipient_code")]
-        public string RecipientCode { get; set; } = string.Empty;
+    //public class RecipientResponse
+    //{
+    //    [JsonPropertyName("recipient_code")]
+    //    public string RecipientCode { get; set; } = string.Empty;
 
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
-    }
+    //    [JsonPropertyName("name")]
+    //    public string Name { get; set; } = string.Empty;
+    //}
+
+    //public class InitTransferResponse
+    //{
+    //    [JsonPropertyName("reference")]
+    //    public string? Reference { get; set; }
+
+    //    [JsonPropertyName("transfer_code")]
+    //    public string TransferCode { get; set; } = string.Empty;
+
+    //    [JsonPropertyName("status")]
+    //    public string Status { get; set; } = string.Empty;
+    //    [JsonPropertyName("amount")]
+    //    public long AmountInKobo { get; set; }
+    //}
 
     public class InitTransferResponse
     {
-        [JsonPropertyName("transfer_code")]
-        public string TransferCode { get; set; } = string.Empty;
+        [JsonPropertyName("reference")]
+        public string Reference { get; set; } = string.Empty;
 
-        [JsonPropertyName("status")]
-        public string Status { get; set; } = string.Empty;
+        [JsonPropertyName("recipient")]
+        public string Recipient { get; set; } = string.Empty;
+
         [JsonPropertyName("amount")]
         public long AmountInKobo { get; set; }
 
-        [JsonPropertyName("reference")]
-        public string? Reference { get; set; }
+        [JsonPropertyName("transfer_code")]
+        public string TransferCode { get; set; } = string.Empty;
+
+        [JsonPropertyName("currency")]
+        public string Currency { get; set; } = string.Empty;
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; } = string.Empty;
     }
 
     public class VerifyTransferResponse
@@ -62,10 +83,10 @@ namespace iDevWorks.Paystack.Transfer
         public DateTime UpdatedAt { get; set; }
 
         [JsonPropertyName("recipient")]
-        public VerifyTransferRecipientData? Recipient { get; set; }
+        public RecipientResponse? Recipient { get; set; }
     }
 
-    public class VerifyTransferRecipientData
+    public class RecipientResponse
     {
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
@@ -77,10 +98,10 @@ namespace iDevWorks.Paystack.Transfer
         public string Currency { get; set; } = string.Empty;
 
         [JsonPropertyName("details")]
-        public VerifyTransferRecipientDetailsData? Details { get; set; }
+        public RecipientAccountResponse? Details { get; set; }
     }
 
-    public class VerifyTransferRecipientDetailsData
+    public class RecipientAccountResponse
     {
         [JsonPropertyName("account_number")]
         public string AccountNumber { get; set; } = string.Empty;
@@ -90,26 +111,5 @@ namespace iDevWorks.Paystack.Transfer
 
         [JsonPropertyName("bank_name")]
         public string BankName { get; set; } = string.Empty;
-    }
-
-    public class InitBulkTransferResponse
-    {
-        [JsonPropertyName("reference")]
-        public string Reference { get; set; } = string.Empty;
-
-        [JsonPropertyName("recipient")]
-        public string Recipient { get; set; } = string.Empty;
-
-        [JsonPropertyName("amount")]
-        public long AmountInKobo { get; set; }
-
-        [JsonPropertyName("transfer_code")]
-        public string TransferCode { get; set; } = string.Empty;
-
-        [JsonPropertyName("currency")]
-        public string Currency { get; set; } = string.Empty;
-
-        [JsonPropertyName("status")]
-        public string Status { get; set; } = string.Empty;
     }
 }

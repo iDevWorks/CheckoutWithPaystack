@@ -26,20 +26,21 @@ namespace iDevWorks.Paystack
             string endpoint, CancellationToken cancellation = default) where TResult : class
         {
             var response = await _httpClient.GetAsync(endpoint, cancellation);
-            return ProcessResponse<TResult>(response, cancellation).Result;
+            return await ProcessResponse<TResult>(response, cancellation);
         }
 
         public async Task<TResult> PostAsync<TResult>(
             string endpoint, object payload, CancellationToken cancellation = default) where TResult : class
         {
             var response = await _httpClient.PostAsJsonAsync(endpoint, payload, cancellation);
-            return ProcessResponse<TResult>(response, cancellation).Result;
+            return await ProcessResponse<TResult>(response, cancellation);
         }
 
-        private static async Task<TResult> ProcessResponse<TResult>(HttpResponseMessage httpResponse, CancellationToken cancellation) where TResult: class 
+        private static async Task<TResult> ProcessResponse<TResult>(
+            HttpResponseMessage httpResponse, CancellationToken cancellation) where TResult: class 
         {
             var jsonString = await httpResponse.Content.ReadAsStringAsync(cancellation);
-            var result = JsonSerializer.Deserialize<Result<TResult>>(jsonString, _jsonOptions);
+            var result = JsonSerializer.Deserialize<PaystackResult<TResult>>(jsonString, _jsonOptions);
 
             if (httpResponse.IsSuccessStatusCode)
             {

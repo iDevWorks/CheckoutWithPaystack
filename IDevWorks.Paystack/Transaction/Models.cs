@@ -14,7 +14,7 @@ namespace iDevWorks.Paystack.Transaction
         public string Reference { get; } = reference;
     }
 
-    public class TransactionResponse(decimal amountInKobo, string reference, string status, string message, string gatewayResponse, decimal requestedAmount, Customer customer)
+    public class TransactionResponse(decimal amountInKobo, string reference, string status, string message, string gatewayResponse, decimal requestedAmount, CustomerResponse customer)
     {
         [JsonPropertyName("amount")]
         public decimal AmountInKobo { get; } = amountInKobo;
@@ -35,12 +35,12 @@ namespace iDevWorks.Paystack.Transaction
         public decimal RequestedAmount { get; } = requestedAmount;
 
         [JsonPropertyName("customer")]
-        public Customer Customer { get; } = customer;
+        public CustomerResponse Customer { get; } = customer;
 
         public bool IsSuccessful => Status == "success";
     }
 
-    public class Customer(string firstName, string lastName, string email)
+    public class CustomerResponse(string firstName, string lastName, string email)
     {
         [JsonPropertyName("first_name")]
         public string FirstName { get; } = firstName;
