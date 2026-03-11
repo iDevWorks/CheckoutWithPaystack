@@ -3,10 +3,29 @@ using System.Text.Json.Serialization;
 
 namespace iDevWorks.Tuya;
 
-public class Command
+internal class Command
 {
     [JsonPropertyName("commands")]
     public IEnumerable<CodeValue> Commands { get; set; } = [];
+
+    public static Command FromDictionary(Dictionary<string, object> dict)
+    {
+        var commands = new List<CodeValue>();
+        foreach (var kv in dict)
+        {
+            commands.Add(new CodeValue { Code = kv.Key, Value = kv.Value });
+        }
+        return new Command { Commands = commands };
+    }
+}
+
+public class CodeValue
+{
+    [JsonPropertyName("code")]
+    public required string Code { get; set; }
+
+    [JsonPropertyName("value")]
+    public required object Value { get; set; }
 }
 
 public class Response<TResult>
@@ -119,13 +138,4 @@ public class Device
     public required string Uuid { get; set; }
 
     public override string ToString() => Name;
-}
-
-public class CodeValue
-{
-    [JsonPropertyName("code")]
-    public required string Code { get; set; }
-
-    [JsonPropertyName("value")]
-    public required object Value { get; set; }
 }

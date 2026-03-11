@@ -13,8 +13,10 @@ namespace iDevWorks.Paystack
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(secretKey);
 
-            _httpClient = httpClient ?? new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://api.paystack.co/");
+            _httpClient = httpClient ?? new HttpClient
+            {
+                BaseAddress = new Uri("https://api.paystack.co/")
+            };
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {secretKey}");
 
             DirectDebit = new DirectDebit.Client(this);

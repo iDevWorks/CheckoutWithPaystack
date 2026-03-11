@@ -12,7 +12,7 @@ public class Client(Region region, string clientId, string clientSecret, HttpCli
     private readonly string _clientSecret = clientSecret;
     private Token? token = null;
 
-    public Task<bool> SendInstructions(string deviceId, IEnumerable<CodeValue> commands)
+    public Task<bool> SendInstructions(string deviceId, Dictionary<string, object> commands)
     {
         var body = CreateCommandBody(commands);
         var path = $"v1.0/devices/{deviceId}/commands";
@@ -34,7 +34,7 @@ public class Client(Region region, string clientId, string clientSecret, HttpCli
     private async Task<TResult> RequestAsync<TResult>(
         HttpMethod method, string path, string? body = null,
         bool skipToken = false, bool forceTokenRefresh = false,
-        CancellationToken ct = default)
+        CancellationToken cancellation = default)
     {
         httpClient ??= new HttpClient();
 
@@ -44,11 +44,6 @@ public class Client(Region region, string clientId, string clientSecret, HttpCli
         var t = (DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalMilliseconds.ToString("0");
 
         string headersStr = "";
-        //if (headers.Count > 0)
-        //{
-        //    headersStr = string.Concat(headers.Select(kv => $"{kv.Key}:{kv.Value}\n"));
-        //    headers.Add("Signature-Headers", string.Join(":", headers.Keys));
-        //}
 
         if (skipToken)
         {
@@ -57,7 +52,7 @@ public class Client(Region region, string clientId, string clientSecret, HttpCli
         }
         else
         {
-            await RefreshAccessToken(forceTokenRefresh, ct);
+            await RefreshAccessToken(forceTokenRefresh, cancellation);
             payload += token?.AccessToken + t;
         }
 
@@ -68,15 +63,15 @@ public class Client(Region region, string clientId, string clientSecret, HttpCli
 
         headers["t"] = t;
         headers["client_id"] = _clientId;
-        headers["sign"] = ComputeHmacSha256(payload, _clientSecret);
         headers["sign_method"] = "HMAC-SHA256";
+        headers["sign"] = ComputeHmacSha256(payload, _clientSecret);
         if (!skipToken && token != null)
             headers["access_token"] = token.AccessToken;
 
         var request = CreateRequestMessage(_region, method, path, body, headers);
-        var response = await httpClient.SendAsync(request, ct).ConfigureAwait(false);
+        var response = await httpClient.SendAsync(request, cancellation).ConfigureAwait(false);
 
-        var result = await response.Content.ReadFromJsonAsync<Response<TResult>>(ct)
+        var result = await response.Content.ReadFromJsonAsync<Response<TResult>>(cancellation)
             ?? throw new InvalidDataException("Failed to deserialize");
 
         if (!result.Success)
@@ -116,19 +111,19 @@ public class Client(Region region, string clientId, string clientSecret, HttpCli
         return request;
     }
 
-    private async Task RefreshAccessToken(bool force, CancellationToken ct)
+    private async Task RefreshAccessToken(bool force, CancellationToken cancellation)
     {
         if (force || token == null || token.HasExpired())
         {
             var path = "v1.0/token?grant_type=1";
             token = await RequestAsync<Token>(HttpMethod.Get,
-                path, null, skipToken: true, false, ct);
+                path, null, skipToken: true, false, cancellation);
         }
     }
 
-    private static string CreateCommandBody(IEnumerable<CodeValue> commands)
+    private static string CreateCommandBody(Dictionary<string, object> commands)
     {
-        var request = new Command { Commands = commands };
+        var request = Command.FromDictionary(commands);
         return JsonSerializer.Serialize(request);
     }
 
@@ -154,5 +149,5 @@ public enum Region
     EasternAmerica,
     CentralEurope,
     WesternEurope,
-    India
+    India,
 }

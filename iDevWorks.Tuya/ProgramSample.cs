@@ -14,14 +14,14 @@ partial class Program
 
             for (int i = 0; i < 3; i++)
             {
-                var instructions = new List<CodeValue>
+                var instructions = new Dictionary<string, object>
                     {
-                        new() { Code = "switch", Value = i % 2 == 0 },
-                        //new() { Code = "countdown_1", Value = 1111 },     //setup multiple countdowns
-                        //new() { Code = "relay_status", Value = "last" },  //power_on, power_off, last
-                        //new() { Code = "light_mode", Value = "relay" },   //relay, pos, none, on
-                        //new() { Code = "child_lock", Value = true },      //maintenance lock
-                        //new() { Code = "cycle_time", Value = 33 },
+                        { "switch", i % 2 == 0 },
+                        //{ "countdown_1", 1111 },        // setup multiple countdowns
+                        //{ "relay_status", "last" },     // power_on, power_off, last
+                        //{ "light_mode", "relay" },      // relay, pos, none, on
+                        //{ "child_lock", true },         // maintenance lock
+                        //{ "cycle_time", 33 },
                     };
 
                 var result = await tuya.SendInstructions(DeviceId, instructions);

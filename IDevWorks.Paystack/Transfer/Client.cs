@@ -2,9 +2,17 @@ namespace iDevWorks.Paystack.Transfer;
 
 public class Client(PaystackClient paystack)
 {
-    public Task<BalanceResponse> GetBalance()
+    public async Task<BalanceResponse> GetBalance(string currency = "NGN")
     {
-        return paystack.GetAsync<BalanceResponse>("balance");
+        var balances = await GetBalances();
+
+        return balances.FirstOrDefault(b => b.Currency == currency)
+            ?? throw new InvalidOperationException($"No balance found for currency: {currency}");
+    }
+
+    public Task<List<BalanceResponse>> GetBalances()
+    {
+        return paystack.GetAsync<List<BalanceResponse>>("balance");
     }
 
     public Task<RecipientResponse> CreateRecipient(string name, string accountNumber, string bankCode)
@@ -51,14 +59,14 @@ public class Client(PaystackClient paystack)
         return paystack.PostAsync<InitTransferResponse>("transfer", payload);
     }
 
-    public Task<List<InitTransferResponse>> InitiateBulkTransfer(IEnumerable<TransferItem> transfers)
+    public Task<List<InitTransferResponse>> InitiateBulkTransfer(IEnumerable<TransferItem> transfers, string currency = "NGN")
     {
         ArgumentNullException.ThrowIfNull(transfers);
         ArgumentOutOfRangeException.ThrowIfZero(transfers.Count());
 
         var payload = new
         {
-            currency = "NGN",
+            currency,
             source = "balance",
             transfers = transfers.Select(t => new
             {
