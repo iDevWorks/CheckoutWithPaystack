@@ -5,9 +5,11 @@ namespace iDevWorks.Paystack
 {
     public class PaystackClient
     {
+        public VirtualAccount.Client VirtualAccount { get; }
         public DirectDebit.Client DirectDebit { get; }
         public Transaction.Client Transaction { get; }
         public Transfer.Client Transfer { get; }
+        public Customer.Client Customer { get; }
 
         public PaystackClient(string secretKey, HttpClient? httpClient = null)
         {
@@ -19,30 +21,46 @@ namespace iDevWorks.Paystack
             };
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {secretKey}");
 
+            VirtualAccount = new VirtualAccount.Client(this);
             DirectDebit = new DirectDebit.Client(this);
             Transaction = new Transaction.Client(this);
             Transfer = new Transfer.Client(this);
+            Customer = new Customer.Client(this);
         }
 
         public async Task<TResult> GetAsync<TResult>(
-            string endpoint, CancellationToken cancellation = default) where TResult : class
+            string endpoint, CancellationToken ct = default) where TResult : class
         {
-            var response = await _httpClient.GetAsync(endpoint, cancellation);
-            return await ProcessResponse<TResult>(response, cancellation);
+            var response = await _httpClient.GetAsync(endpoint, ct);
+            return await ProcessResponse<TResult>(response, ct);
         }
 
         public async Task<TResult> PostAsync<TResult>(
-            string endpoint, object payload, CancellationToken cancellation = default) where TResult : class
+            string endpoint, object body, CancellationToken ct = default) where TResult : class
         {
-            var response = await _httpClient.PostAsJsonAsync(endpoint, payload, cancellation);
-            return await ProcessResponse<TResult>(response, cancellation);
+            var response = await _httpClient.PostAsJsonAsync(endpoint, body, ct);
+            return await ProcessResponse<TResult>(response, ct);
+        }
+
+        public async Task<TResult> PutAsync<TResult>(
+            string endpoint, object body, CancellationToken ct = default) where TResult : class
+        {
+            var response = await _httpClient.PutAsJsonAsync(endpoint, body, ct);
+            return await ProcessResponse<TResult>(response, ct);
+        }
+
+        public async Task<TResult> DeleteAsync<TResult>(
+            string endpoint, CancellationToken ct = default) where TResult : class
+        {
+            var response = await _httpClient.DeleteAsync(endpoint, ct);
+            return await ProcessResponse<TResult>(response, ct);
         }
 
         private static async Task<TResult> ProcessResponse<TResult>(
-            HttpResponseMessage httpResponse, CancellationToken cancellation) where TResult: class 
+            HttpResponseMessage httpResponse, CancellationToken ct) where TResult: class 
         {
-            var jsonString = await httpResponse.Content.ReadAsStringAsync(cancellation);
-            var result = JsonSerializer.Deserialize<PaystackResult<TResult>>(jsonString, _jsonOptions);
+            var jsonString = await httpResponse.Content.ReadAsStringAsync(ct);
+            var result = JsonSerializer.Deserialize<Models.PaystackResult<TResult>>(jsonString, _jsonOptions);
 
             if (httpResponse.IsSuccessStatusCode)
             {

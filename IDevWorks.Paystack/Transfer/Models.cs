@@ -1,8 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace iDevWorks.Paystack.Transfer
+namespace iDevWorks.Paystack.Models
 {
-
     public class BalanceResponse
     {
         [JsonPropertyName("balance")]
@@ -12,28 +11,13 @@ namespace iDevWorks.Paystack.Transfer
         public string Currency { get; set; } = string.Empty;
     }
 
-    //public class RecipientResponse
-    //{
-    //    [JsonPropertyName("recipient_code")]
-    //    public string RecipientCode { get; set; } = string.Empty;
-
-    //    [JsonPropertyName("name")]
-    //    public string Name { get; set; } = string.Empty;
-    //}
-
-    //public class InitTransferResponse
-    //{
-    //    [JsonPropertyName("reference")]
-    //    public string? Reference { get; set; }
-
-    //    [JsonPropertyName("transfer_code")]
-    //    public string TransferCode { get; set; } = string.Empty;
-
-    //    [JsonPropertyName("status")]
-    //    public string Status { get; set; } = string.Empty;
-    //    [JsonPropertyName("amount")]
-    //    public long AmountInKobo { get; set; }
-    //}
+    public class TransferRequest
+    {
+        public decimal Amount { get; init; }
+        public string Reason { get; init; } = string.Empty;
+        public string Reference { get; init; } = string.Empty;
+        public string RecipientCode { get; init; } = string.Empty;
+    }
 
     public class InitTransferResponse
     {

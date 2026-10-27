@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace iDevWorks.Paystack
+namespace iDevWorks.Paystack.Models
 {
     internal class PaystackResult<TResult>(bool status, string? message, TResult data) where TResult : class
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace iDevWorks.Paystack.DirectDebit
+namespace iDevWorks.Paystack.Models
 {
     public class AuthInitResponse
     {
@@ -68,7 +68,7 @@ namespace iDevWorks.Paystack.DirectDebit
         public ChargeAuthResponse? Authorization { get; set; }
 
         [JsonPropertyName("customer")]
-        public ChargeCustomerResponse? Customer { get; set; }
+        public CustomerResponse? Customer { get; set; }
     }
 
     public class ChargeAuthResponse
@@ -105,17 +105,5 @@ namespace iDevWorks.Paystack.DirectDebit
 
         [JsonPropertyName("reusable")]
         public bool Reusable { get; set; }
-    }
-
-    public class ChargeCustomerResponse
-    {
-        [JsonPropertyName("id")]
-        public long Id { get; set; }
-
-        [JsonPropertyName("email")]
-        public string Email { get; set; } = string.Empty;
-
-        [JsonPropertyName("customer_code")]
-        public string CustomerCode { get; set; } = string.Empty;
     }
 }

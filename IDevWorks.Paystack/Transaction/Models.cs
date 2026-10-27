@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace iDevWorks.Paystack.Transaction
+namespace iDevWorks.Paystack.Models
 {
     public class InitTransactionResponse(string authorizationUrl, string accessCode, string reference)
     {
@@ -39,17 +39,4 @@ namespace iDevWorks.Paystack.Transaction
 
         public bool IsSuccessful => Status == "success";
     }
-
-    public class CustomerResponse(string firstName, string lastName, string email)
-    {
-        [JsonPropertyName("first_name")]
-        public string FirstName { get; } = firstName;
-
-        [JsonPropertyName("last_name")]
-        public string LastName { get; } = lastName;
-
-        [JsonPropertyName("email")]
-        public string Email { get; } = email;
-    }
-
 }

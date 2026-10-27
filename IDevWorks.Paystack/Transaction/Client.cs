@@ -1,15 +1,18 @@
-﻿namespace iDevWorks.Paystack.Transaction;
+﻿using iDevWorks.Paystack.Models;
+
+namespace iDevWorks.Paystack.Transaction;
 
 public class Client(PaystackClient paystack)
 {
-    public Task<InitTransactionResponse> InitializeTransaction(string email, decimal amount, string callbackUrl, string reference)
+    public Task<InitTransactionResponse> InitializeTransaction(
+        string email, decimal amount, string callbackUrl, string reference, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(email);
         ArgumentException.ThrowIfNullOrWhiteSpace(callbackUrl);
         ArgumentException.ThrowIfNullOrWhiteSpace(reference);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
 
-        var payload = new
+        var body = new
         {
             email,
             reference,
@@ -17,13 +20,13 @@ public class Client(PaystackClient paystack)
             callback_url = callbackUrl,
         };
 
-        return paystack.PostAsync<InitTransactionResponse>("transaction/initialize", payload);
+        return paystack.PostAsync<InitTransactionResponse>("transaction/initialize", body, ct);
     }
 
-    public Task<TransactionResponse> VerifyTransaction(string reference)
+    public Task<TransactionResponse> VerifyTransaction(string reference, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(reference);
 
-        return paystack.GetAsync<TransactionResponse>($"transaction/verify/{reference}");
+        return paystack.GetAsync<TransactionResponse>($"transaction/verify/{reference}", ct);
     }
 }
