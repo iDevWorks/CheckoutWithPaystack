@@ -1,10 +1,10 @@
 using iDevWorks.Paystack.Models;
 
-namespace iDevWorks.Paystack.Transfer;
+namespace iDevWorks.Paystack;
 
-public class Client(PaystackClient paystack)
+public class TransferClient(PaystackClient paystack)
 {
-    public async Task<BalanceResponse> GetBalance(string currency = "NGN", CancellationToken ct = default)
+    public async Task<Balance> GetBalance(string currency = "NGN", CancellationToken ct = default)
     {
         var balances = await GetBalances(ct);
 
@@ -12,12 +12,12 @@ public class Client(PaystackClient paystack)
             ?? throw new InvalidOperationException($"No balance found for currency: {currency}");
     }
 
-    public Task<List<BalanceResponse>> GetBalances(CancellationToken ct = default)
+    public Task<List<Balance>> GetBalances(CancellationToken ct = default)
     {
-        return paystack.GetAsync<List<BalanceResponse>>("balance", ct);
+        return paystack.GetAsync<List<Balance>>("balance", ct);
     }
 
-    public Task<RecipientResponse> CreateRecipient(string name, string accountNumber, string bankCode, CancellationToken ct = default)
+    public Task<Recipient> CreateRecipient(string name, string accountNumber, string bankCode, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(accountNumber);
@@ -32,17 +32,17 @@ public class Client(PaystackClient paystack)
             currency = "NGN",
         };
 
-        return paystack.PostAsync<RecipientResponse>("transferrecipient", body, ct);
+        return paystack.PostAsync<Recipient>("transferrecipient", body, ct);
     }
 
-    public Task<RecipientResponse> FetchRecipient(string recipientCode, CancellationToken ct = default)
+    public Task<Recipient> FetchRecipient(string recipientCode, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(recipientCode);
 
-        return paystack.GetAsync<RecipientResponse>($"transferrecipient/{recipientCode}", ct);
+        return paystack.GetAsync<Recipient>($"transferrecipient/{recipientCode}", ct);
     }
 
-    public Task<InitTransferResponse> InitiateTransfer(string recipientCode, decimal amount, string reason, string reference, CancellationToken ct = default)
+    public Task<TransferResponse> Initiate(string recipientCode, decimal amount, string reason, string reference, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(recipientCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(reference);
@@ -58,10 +58,10 @@ public class Client(PaystackClient paystack)
             recipient = recipientCode,
         };
 
-        return paystack.PostAsync<InitTransferResponse>("transfer", body, ct);
+        return paystack.PostAsync<TransferResponse>("transfer", body, ct);
     }
 
-    public Task<List<InitTransferResponse>> InitiateBulkTransfer(IEnumerable<TransferRequest> transfers, string currency = "NGN", CancellationToken ct = default)
+    public Task<List<TransferResponse>> InitiateBulk(IEnumerable<TransferItem> transfers, string currency = "NGN", CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(transfers);
         ArgumentOutOfRangeException.ThrowIfZero(transfers.Count());
@@ -79,13 +79,13 @@ public class Client(PaystackClient paystack)
             })
         };
 
-        return paystack.PostAsync<List<InitTransferResponse>>("transfer/bulk", body, ct);
+        return paystack.PostAsync<List<TransferResponse>>("transfer/bulk", body, ct);
     }
 
-    public Task<VerifyTransferResponse> VerifyTransfer(string reference, CancellationToken ct = default)
+    public Task<Transfer> Verify(string reference, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(reference);
 
-        return paystack.GetAsync<VerifyTransferResponse>($"transfer/verify/{reference}", ct);
+        return paystack.GetAsync<Transfer>($"transfer/verify/{reference}", ct);
     }
 }

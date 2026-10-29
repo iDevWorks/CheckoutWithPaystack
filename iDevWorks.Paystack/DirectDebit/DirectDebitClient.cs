@@ -1,10 +1,10 @@
 using iDevWorks.Paystack.Models;
 
-namespace iDevWorks.Paystack.DirectDebit;
+namespace iDevWorks.Paystack;
 
-public class Client(PaystackClient paystack)
+public class DirectDebitClient(PaystackClient paystack)
 {
-    public Task<AuthInitResponse> InitializeAuthorization(string email, string accountNumber, string bankCode, string callbackUrl, CancellationToken ct = default)
+    public Task<Authorization> Initialize(string email, string accountNumber, string bankCode, string callbackUrl, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(email);
         ArgumentException.ThrowIfNullOrWhiteSpace(accountNumber);
@@ -22,17 +22,17 @@ public class Client(PaystackClient paystack)
             callback_url = callbackUrl,
         };
 
-        return paystack.PostAsync<AuthInitResponse>("customer/authorization/initialize", body, ct);
+        return paystack.PostAsync<Authorization>("customer/authorization/initialize", body, ct);
     }
 
-    public Task<AuthVerifyResponse> VerifyAuthorization(string reference, CancellationToken ct = default)
+    public Task<DirectDebitAuth> Verify(string reference, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(reference);
 
-        return paystack.GetAsync<AuthVerifyResponse>($"customer/authorization/verify/{reference}", ct);
+        return paystack.GetAsync<DirectDebitAuth>($"customer/authorization/verify/{reference}", ct);
     }
 
-    public Task<ChargeResponse> ChargeAccount(string authorizationCode, string email, decimal amount, CancellationToken ct = default)
+    public Task<DirectDebitCharge> Charge(string authorizationCode, string email, decimal amount, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(email);
         ArgumentException.ThrowIfNullOrWhiteSpace(authorizationCode);
@@ -45,17 +45,17 @@ public class Client(PaystackClient paystack)
             amount = (int)(amount * 100) // Convert to kobo
         };
 
-        return paystack.PostAsync<ChargeResponse>("transaction/charge_authorization", body, ct);
+        return paystack.PostAsync<DirectDebitCharge>("transaction/charge_authorization", body, ct);
     }
 
-    public Task<ChargeResponse> VerifyCharge(string reference, CancellationToken ct = default)
+    public Task<DirectDebitCharge> VerifyCharge(string reference, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(reference);
 
-        return paystack.GetAsync<ChargeResponse>($"transaction/verify/{reference}", ct);
+        return paystack.GetAsync<DirectDebitCharge>($"transaction/verify/{reference}", ct);
     }
 
-    public async Task DeactivateAuthorization(string authorizationCode, CancellationToken ct = default)
+    public async Task Deactivate(string authorizationCode, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(authorizationCode);
 

@@ -1,15 +1,15 @@
 using iDevWorks.Paystack.Models;
 
-namespace iDevWorks.Paystack.Customer;
+namespace iDevWorks.Paystack;
 
-public class Client(PaystackClient paystack)
+public class CustomerClient(PaystackClient paystack)
 {
-    public async Task<CustomerResponse?> GetCustomerAsync(string customerCode, CancellationToken ct = default)
+    public async Task<Customer?> Get(string customerCode, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
         try
         {
-            return await paystack.GetAsync<CustomerResponse>($"customer/{customerCode}", ct);
+            return await paystack.GetAsync<Customer>($"customer/{customerCode}", ct);
         }
         catch (Exception)
         {
@@ -17,7 +17,7 @@ public class Client(PaystackClient paystack)
         }
     }
 
-    public Task<CustomerResponse> CreateCustomerAsync(string email, string firstName, string lastName, string phone, CancellationToken ct = default)
+    public Task<Customer> Create(string email, string firstName, string lastName, string phone, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(email);
         ArgumentException.ThrowIfNullOrWhiteSpace(phone);
@@ -32,10 +32,10 @@ public class Client(PaystackClient paystack)
             last_name = lastName,
         };
 
-        return paystack.PostAsync<CustomerResponse>("customer", body, ct);
+        return paystack.PostAsync<Customer>("customer", body, ct);
     }
 
-    public Task<CustomerResponse> UpdateCustomerAsync(string customerCode, string firstName, string lastName, string phone, CancellationToken ct = default)
+    public Task<Customer> Update(string customerCode, string firstName, string lastName, string phone, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(customerCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(phone);
@@ -49,6 +49,6 @@ public class Client(PaystackClient paystack)
             last_name = lastName,
         };
 
-        return paystack.PutAsync<CustomerResponse>($"customer/{customerCode}", body, ct); //PUT not POST
+        return paystack.PutAsync<Customer>($"customer/{customerCode}", body, ct); //PUT not POST
     }
 }

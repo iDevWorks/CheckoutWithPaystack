@@ -1,16 +1,20 @@
 ﻿namespace iDevWorks.Paystack
 {
-    public class PaystackException(Status code, string? message) : Exception
+    public class PaystackException(Status code, string? message, Exception? innerException = null) 
+        : Exception(message, innerException)
     {
         public Status Code { get; } = code;
-        public new string? Message { get; } = message;
     }
 
     public enum Status
     {
-        REQUEST_OK_JSON_OK = 0,
-        REQUEST_OK_JSON_FAIL = 550,
-        REQUEST_FAIL_JSON_OK = 551,
-        REQUEST_FAIL_JSON_FAIL = 552,
+        API_ERROR = 551,
+        UNKNOWN_ERROR = 552,
+        MALFORMED_JSON = 553,
+        TIMEOUT = 554,
+        NETWORK_ERROR = 555,
+
+        INVALID_SIGNATURE = 556,
+        FAILED_TO_PROCESS_EVENT = 558,
     }
 }

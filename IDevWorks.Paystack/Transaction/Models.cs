@@ -1,42 +1,41 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace iDevWorks.Paystack.Models
+namespace iDevWorks.Paystack.Models;
+
+public sealed class Authorization
 {
-    public class InitTransactionResponse(string authorizationUrl, string accessCode, string reference)
-    {
-        [JsonPropertyName("authorization_url")]
-        public string AuthorizationUrl { get; } = authorizationUrl;
+    [JsonPropertyName("authorization_url"), JsonAlias("redirect_url")]
+    public string AuthorizationUrl { get; init; } = string.Empty;
 
-        [JsonPropertyName("access_code")]
-        public string AccessCode { get; } = accessCode;
+    [JsonPropertyName("access_code")]
+    public string AccessCode { get; init; } = string.Empty;
 
-        [JsonPropertyName("reference")]
-        public string Reference { get; } = reference;
-    }
+    [JsonPropertyName("reference")]
+    public string Reference { get; init; } = string.Empty;
+}
 
-    public class TransactionResponse(decimal amountInKobo, string reference, string status, string message, string gatewayResponse, decimal requestedAmount, CustomerResponse customer)
-    {
-        [JsonPropertyName("amount")]
-        public decimal AmountInKobo { get; } = amountInKobo;
+public sealed class Transaction
+{
+    [JsonPropertyName("amount")]
+    public decimal AmountInKobo { get; init; } = decimal.Zero;
 
-        [JsonPropertyName("reference")]
-        public string Reference { get; } = reference;
+    [JsonPropertyName("reference")]
+    public string Reference { get; init; } = string.Empty;
 
-        [JsonPropertyName("status")]
-        public string Status { get; } = status;
+    [JsonPropertyName("status")]
+    public string Status { get; init; } = string.Empty;
 
-        [JsonPropertyName("message")]
-        public string Message { get; } = message;
+    [JsonPropertyName("message")]
+    public string Message { get; init; } = string.Empty;
 
-        [JsonPropertyName("gateway_response")]
-        public string GatewayResponse { get; } = gatewayResponse;
+    [JsonPropertyName("gateway_response")]
+    public string GatewayResponse { get; init; } = string.Empty;
 
-        [JsonPropertyName("requested_amount")]
-        public decimal RequestedAmount { get; } = requestedAmount;
+    [JsonPropertyName("requested_amount")]
+    public decimal RequestedAmount { get; init; } = decimal.Zero;
 
-        [JsonPropertyName("customer")]
-        public CustomerResponse Customer { get; } = customer;
+    [JsonPropertyName("customer")]
+    public Customer? Customer { get; init; } 
 
-        public bool IsSuccessful => Status == "success";
-    }
+    public bool IsSuccessful => Status == "success";
 }

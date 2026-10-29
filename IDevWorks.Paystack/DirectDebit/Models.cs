@@ -1,109 +1,90 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace iDevWorks.Paystack.Models
+namespace iDevWorks.Paystack.Models;
+
+public sealed class DirectDebitAuth
 {
-    public class AuthInitResponse
-    {
-        [JsonPropertyName("redirect_url")]
-        public string RedirectUrl { get; set; } = string.Empty;
+    [JsonPropertyName("authorization_code")]
+    public string AuthorizationCode { get; set; } = string.Empty;
 
-        [JsonPropertyName("reference")]
-        public string Reference { get; set; } = string.Empty;
-    }
+    [JsonPropertyName("channel")]
+    public string Channel { get; set; } = string.Empty;
 
-    public class AuthVerifyResponse
-    {
-        [JsonPropertyName("authorization_code")]
-        public string AuthorizationCode { get; set; } = string.Empty;
+    [JsonPropertyName("bank")]
+    public string Bank { get; set; } = string.Empty;
 
-        [JsonPropertyName("channel")]
-        public string Channel { get; set; } = string.Empty;
+    [JsonPropertyName("active")]
+    public bool Active { get; set; }
 
-        [JsonPropertyName("bank")]
-        public string Bank { get; set; } = string.Empty;
+    [JsonPropertyName("customer")]
+    public Customer? Customer { get; set; }
+}
 
-        [JsonPropertyName("active")]
-        public bool Active { get; set; }
+public sealed class DirectDebitCharge
+{
+    [JsonPropertyName("amount")]
+    public long AmountInKobo { get; set; } 
 
-        [JsonPropertyName("customer")]
-        public AuthCustomerResponse? Customer { get; set; }
-    }
+    [JsonPropertyName("currency")]
+    public string Currency { get; set; } = string.Empty;
 
-    public class AuthCustomerResponse
-    {
-        [JsonPropertyName("code")]
-        public string Code { get; set; } = string.Empty;
+    [JsonPropertyName("transaction_date")]
+    public DateTime TransactionDate { get; set; }
 
-        [JsonPropertyName("email")]
-        public string Email { get; set; } = string.Empty;
-    }
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
 
-    public class ChargeResponse
-    {
-        [JsonPropertyName("amount")]
-        public long AmountInKobo { get; set; } 
+    [JsonPropertyName("reference")]
+    public string Reference { get; set; } = string.Empty;
 
-        [JsonPropertyName("currency")]
-        public string Currency { get; set; } = string.Empty;
+    [JsonPropertyName("gateway_response")]
+    public string GatewayResponse { get; set; } = string.Empty;
 
-        [JsonPropertyName("transaction_date")]
-        public DateTime TransactionDate { get; set; }
+    [JsonPropertyName("channel")]
+    public string Channel { get; set; } = string.Empty;
 
-        [JsonPropertyName("status")]
-        public string Status { get; set; } = string.Empty;
+    [JsonPropertyName("fees")]
+    public long? Fees { get; set; }
 
-        [JsonPropertyName("reference")]
-        public string Reference { get; set; } = string.Empty;
+    [JsonPropertyName("authorization")]
+    public DirectDebitChargeAuth? Authorization { get; set; }
 
-        [JsonPropertyName("gateway_response")]
-        public string GatewayResponse { get; set; } = string.Empty;
+    [JsonPropertyName("customer")]
+    public Customer? Customer { get; set; }
+}
 
-        [JsonPropertyName("channel")]
-        public string Channel { get; set; } = string.Empty;
+public sealed class DirectDebitChargeAuth
+{
+    [JsonPropertyName("authorization_code")]
+    public string AuthorizationCode { get; set; } = string.Empty;
 
-        [JsonPropertyName("fees")]
-        public long? Fees { get; set; }
+    [JsonPropertyName("bin")]
+    public string? Bin { get; set; }
 
-        [JsonPropertyName("authorization")]
-        public ChargeAuthResponse? Authorization { get; set; }
+    [JsonPropertyName("last4")]
+    public string? Last4 { get; set; }
 
-        [JsonPropertyName("customer")]
-        public CustomerResponse? Customer { get; set; }
-    }
+    [JsonPropertyName("exp_month")]
+    public string? ExpMonth { get; set; }
 
-    public class ChargeAuthResponse
-    {
-        [JsonPropertyName("authorization_code")]
-        public string AuthorizationCode { get; set; } = string.Empty;
+    [JsonPropertyName("exp_year")]
+    public string? ExpYear { get; set; }
 
-        [JsonPropertyName("bin")]
-        public string? Bin { get; set; }
+    [JsonPropertyName("channel")]
+    public string? Channel { get; set; }
 
-        [JsonPropertyName("last4")]
-        public string? Last4 { get; set; }
+    [JsonPropertyName("card_type")]
+    public string? CardType { get; set; }
 
-        [JsonPropertyName("exp_month")]
-        public string? ExpMonth { get; set; }
+    [JsonPropertyName("bank")]
+    public string? Bank { get; set; }
 
-        [JsonPropertyName("exp_year")]
-        public string? ExpYear { get; set; }
+    [JsonPropertyName("country_code")]
+    public string? CountryCode { get; set; }
 
-        [JsonPropertyName("channel")]
-        public string? Channel { get; set; }
+    [JsonPropertyName("brand")]
+    public string? Brand { get; set; }
 
-        [JsonPropertyName("card_type")]
-        public string? CardType { get; set; }
-
-        [JsonPropertyName("bank")]
-        public string? Bank { get; set; }
-
-        [JsonPropertyName("country_code")]
-        public string? CountryCode { get; set; }
-
-        [JsonPropertyName("brand")]
-        public string? Brand { get; set; }
-
-        [JsonPropertyName("reusable")]
-        public bool Reusable { get; set; }
-    }
+    [JsonPropertyName("reusable")]
+    public bool Reusable { get; set; }
 }
