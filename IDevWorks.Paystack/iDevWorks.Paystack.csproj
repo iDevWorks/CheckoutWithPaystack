@@ -4,6 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!-- Public API uses two namespaces (iDevWorks.Paystack, iDevWorks.Paystack.Models) regardless of folder -->
+    <NoWarn>$(NoWarn);IDE0130</NoWarn>
   </PropertyGroup>
 
 </Project>

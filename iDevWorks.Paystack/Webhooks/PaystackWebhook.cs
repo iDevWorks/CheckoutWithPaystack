@@ -5,35 +5,28 @@ using iDevWorks.Paystack.Models;
 
 namespace iDevWorks.Paystack;
 
-public partial class PaystackClient
+public static class PaystackWebhook
 {
-    public record EventData
-    {
-        public required string RawBody { get; init; }
-        public required string? SignatureHex { get; init; }
-        public required string SecretKey { get; init; }
-    }
-
-    public static async Task OnPaymentReceivedAsync(EventData data,
+    public static async Task OnPaymentReceivedAsync(WebhookRequest request,
         Func<VirtualAccountCharge, CancellationToken, Task> handler,
         CancellationToken ct = default)
     {
-        if (!IsValidSignature(data))
-            throw new PaystackException(Status.INVALID_SIGNATURE, "Rejected webhook with invalid signature");
+        if (!IsValidSignature(request))
+            throw new PaystackException(PaystackErrorCode.INVALID_SIGNATURE, "Rejected webhook with invalid signature");
 
         // 1. Parse the envelope. Only JSON problems are expected here.
         PaystackEvent? evt;
         try
         {
-            evt = JsonSerializer.Deserialize<PaystackEvent>(data.RawBody, _jsonOptions);
+            evt = JsonSerializer.Deserialize<PaystackEvent>(request.RawBody, JsonOptions.Options);
         }
         catch (JsonException ex)
         {
-            throw new PaystackException(Status.MALFORMED_JSON, "Malformed webhook body", ex);
+            throw new PaystackException(PaystackErrorCode.MALFORMED_JSON, "Malformed webhook body", ex);
         }
 
         if (evt?.Event is null || evt.Data.ValueKind != JsonValueKind.Object)
-            throw new PaystackException(Status.MALFORMED_JSON, "Webhook missing 'event' or 'data'");
+            throw new PaystackException(PaystackErrorCode.MALFORMED_JSON, "Webhook missing 'event' or 'data'");
 
         // 2. Dispatch. Anything unexpected here should trigger a Paystack retry.
         try
@@ -41,8 +34,8 @@ public partial class PaystackClient
             switch (evt.Event)
             {
                 case "charge.success":
-                    var charge = evt.Data.Deserialize<VirtualAccountCharge>(_jsonOptions)
-                        ?? throw new PaystackException(Status.MALFORMED_JSON, "charge.success with empty data");
+                    var charge = evt.Data.Deserialize<VirtualAccountCharge>(JsonOptions.Options)
+                        ?? throw new PaystackException(PaystackErrorCode.MALFORMED_JSON, "charge.success with empty data");
 
                     // Only DVA transfers; card/other charges are ignored here.
                     if (charge.Channel == "dedicated_nuban" || charge.Authorization?.Channel == "dedicated_nuban")
@@ -58,15 +51,15 @@ public partial class PaystackClient
         catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
         catch (JsonException ex)
         {
-            throw new PaystackException(Status.MALFORMED_JSON, $"Malformed data for {evt.Event}", ex);
+            throw new PaystackException(PaystackErrorCode.MALFORMED_JSON, $"Malformed data for {evt.Event}", ex);
         }
         catch (Exception ex)
         {
-            throw new PaystackException(Status.FAILED_TO_PROCESS_EVENT, $"Failed to process {evt.Event}", ex);
+            throw new PaystackException(PaystackErrorCode.FAILED_TO_PROCESS_EVENT, $"Failed to process {evt.Event}", ex);
         }
     }
 
-    internal static bool IsValidSignature(EventData data)
+    internal static bool IsValidSignature(WebhookRequest data)
     {
         if (string.IsNullOrWhiteSpace(data.SignatureHex)) 
             return false;
